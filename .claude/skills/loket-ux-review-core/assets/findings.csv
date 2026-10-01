@@ -1,0 +1,3 @@
+id,title,severity,effort,confidence,wcag_sc,wcag_level,heuristic,location,evidence,why_it_matters,fix,status
+F-01,"Icoonknop zonder toegankelijke naam",critical,S,high,4.1.2,A,"","src/components/IconButton.tsx:42","button bevat alleen een svg, geen label of aria-label","screenreadergebruikers horen 'button' zonder doel — de actie is onbruikbaar","aria-label toevoegen of zichtbare tekst opnemen",open
+F-02,"Lichtgrijze hulptekst onder contrastdrempel",serious,S,medium,1.4.3,AA,"Aesthetic and minimalist design","Figma: frame 'Onboarding/Stap 2'","#9aa0a6 op #ffffff ≈ 2.8:1, ruim onder 4.5:1","slechtziende en mobiele gebruikers in fel licht kunnen de instructie niet lezen","donkerder token gebruiken dat ≥4.5:1 haalt",open
