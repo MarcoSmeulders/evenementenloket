@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ux-validate-bash.sh
+# loket-ux-validate-bash.sh
 # PreToolUse guard for the ux-reviewer subagent.
 #
 # The UX reviewer is allowed to RUN read-only accessibility/analysis tooling

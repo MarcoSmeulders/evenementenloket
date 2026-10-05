@@ -1,2 +1,32 @@
+# Editors
 .idea/
+
+# Dependencies
 node_modules/
+
+# Build and test output
+dist/
+coverage/
+playwright-report/
+test-results/
+storybook-static/
+*.tsbuildinfo
+
+# Environment files: only the example is committed
+.env
+.env.*
+!.env.example
+
+# Claude Code: only the project's own loket-* tooling is shared. Everything else
+# (OpenSpec skills and commands, local settings) stays local; recreate the OpenSpec
+# files with `openspec init --tools claude`.
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/loket-*/
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/loket-*.md
+!.claude/scripts/
+.claude/scripts/*
+!.claude/scripts/loket-*.sh

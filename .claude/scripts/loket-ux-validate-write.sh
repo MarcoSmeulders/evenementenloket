@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ux-validate-write.sh
+# loket-ux-validate-write.sh
 # PreToolUse guard for the ux-reviewer subagent (Write/Edit/MultiEdit/NotebookEdit).
 #
 # The UX reviewer produces an artefact (its report) and, in the memory variant,
