@@ -1,8 +1,11 @@
-# Browser tests: started by hand, and on every pull request to main (ADR-0002).
+# Browser tests: on every push to develop, on every pull request to main, and by hand
+# (ADR-0002, ADR-0007).
 name: E2E
 
 on:
   workflow_dispatch:
+  push:
+    branches: [develop]
   pull_request:
     branches: [main]
 
