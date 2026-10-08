@@ -1,0 +1,15 @@
+{
+  "name": "@evenementenloket/schema",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

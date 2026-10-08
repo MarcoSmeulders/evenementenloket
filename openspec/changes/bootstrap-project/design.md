@@ -35,7 +35,7 @@ proposal.md for why this change comes first. Fixed points from earlier decisions
 
 ```
 apps/web         React app + Storybook
-apps/api         Fastify API
+apps/api         Hono API
 packages/schema  Zod schemas and types, shared by web and api
 e2e/             Playwright tests
 ```
@@ -105,24 +105,35 @@ TypeScript directly, so there is no build or watch step for the package.
   deployed in this change.
 - **Why not a package:** see ADR-0004 (one user of the components, so no package yet).
 
-### D6. API: Fastify
+### D6. API: Hono, with a typed client for the web app
 
-- `buildApp(config)` creates the app without starting it. Unit tests use
-  `app.inject()`, and `server.ts` calls `listen`.
+- **Why Hono:** its typed client (`hc`) lets the web app call the API with the routes,
+  inputs and responses known at compile time. If a route or response changes, the web app
+  fails to typecheck. See ADR-0006 for the comparison with Fastify.
+- `buildApp(config)` creates the app without starting it. Unit tests call
+  `app.request()`, so no server or port is needed. `server.ts` starts it with
+  `@hono/node-server`.
+- **Routes are chained** (`app.get(...).get(...)`) and the result is exported as
+  `AppType`. The typed client needs that type.
 - **Config:** a Zod schema reads `process.env` (`PORT`, `HOST`, `LOG_LEVEL`,
   `NODE_ENV`). On failure, it prints which setting is wrong, never its value, and exits
   with code 1. `.env.example` lists every setting with a safe default and a comment.
-- **Logging:** Fastify's built-in pino logger with `redact` on
-  `req.headers.authorization` and `req.headers.cookie`. A test captures log output in a
-  stream and checks that the value is missing.
-- **Errors:** a not-found handler and an error handler both answer with
-  `application/problem+json` (`type`, `title`, `status`, optional `detail`). The
-  problem-detail type is defined in `packages/schema` so the web app can use it later.
-- **Health:** `GET /api/health` returns `{ status: "ok" }`. The response type is
-  `z.infer` of the schema in `packages/schema`. The test parses the response with that
-  same schema.
-- No extra Fastify plugins (such as a Zod type provider) yet. One route does not
-  justify them.
+- **Logging:** pino, added as a dependency because Hono has no structured logger. A small
+  middleware logs one line per request: method, path, status, duration and the request
+  headers. `redact` replaces `authorization` and `cookie`. A test captures log output in a
+  stream and checks that the values are missing.
+- **Errors:** `notFound` and `onError` both answer with `application/problem+json`
+  (`type`, `title`, `status`, optional `detail`). The problem-detail type is defined in
+  `packages/schema` so the web app can use it.
+- **Health:** `GET /api/health` returns `{ status: "ok" }`, typed as `z.infer` of the
+  schema in `packages/schema`. One test calls it through the typed client
+  (`hono/testing`), so the type chain from route to client is tested too.
+- **Typed client in the web app:** `apps/web/src/api/client.ts` creates `hc<AppType>('/')`.
+  The web app imports only the *type* from `@evenementenloket/api` (`import type`), so no
+  API code ends up in the browser bundle. The first feature that calls the API uses this
+  client. Runtime checks of responses still use the Zod schemas where it matters.
+- No validator middleware yet. `@hono/zod-validator` arrives with the first route that
+  takes input.
 
 ### D7. Running web and API together
 

@@ -69,9 +69,23 @@ against the adjacent colours, and no fixed element SHALL cover the focused eleme
 - **Verification:** manual
 
 ### Requirement: Content reflows at narrow widths
-Pages SHALL be usable at a width of 320 CSS pixels and at 400% zoom without scrolling in
-two directions.
+Pages SHALL be usable at a width of 320 CSS pixels, at 400% zoom, and with text enlarged
+to 200% on a phone, without scrolling in two directions. Long words such as Dutch
+compounds SHALL wrap instead of widening the page.
 
 #### Scenario: start page at 320 pixels
 - **WHEN** the start page is shown at 320 CSS pixels wide
 - **THEN** the page has no horizontal scrollbar
+
+#### Scenario: start page with large text on a phone
+- **WHEN** the start page is shown at 360 CSS pixels wide with the text size set to 200%
+- **THEN** the page has no horizontal scrollbar
+
+### Requirement: Home link
+The header SHALL have a link to the start page whose accessible name starts with its
+visible text, and which marks itself as the current page when the start page is open.
+
+#### Scenario: home link on the start page
+- **WHEN** the start page is open
+- **THEN** the home link's accessible name starts with the visible service and municipality name
+- **AND** the home link has `aria-current="page"`

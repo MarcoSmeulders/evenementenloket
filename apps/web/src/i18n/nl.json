@@ -1,0 +1,16 @@
+{
+  "app": {
+    "pageTitle": "{{page}} - Evenementenloket Kranswijk",
+    "service": "Evenementenloket",
+    "municipality": "Gemeente Kranswijk",
+    "homeLinkHint": ", naar de startpagina"
+  },
+  "skipLink": "Naar de inhoud",
+  "footer": {
+    "disclaimer": "Gemeente Kranswijk bestaat niet. Dit is een portfolioproject. Vul geen echte gegevens in."
+  },
+  "start": {
+    "title": "Een evenement melden",
+    "intro": "Organiseert u een klein evenement in Kranswijk? Bijvoorbeeld een buurtfeest, markt of sportdag. Dat meldt u hier bij de gemeente. Het formulier is nog niet klaar."
+  }
+}

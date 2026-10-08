@@ -30,3 +30,6 @@ storybook-static/
 !.claude/scripts/
 .claude/scripts/*
 !.claude/scripts/loket-*.sh
+!.claude/rules/
+.claude/rules/*
+!.claude/rules/loket-*.md

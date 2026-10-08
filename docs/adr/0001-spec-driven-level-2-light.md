@@ -90,12 +90,21 @@ committen we direct.
 - Verandert een scenario, dan moet ook de test aangepast worden.
 - We houden weinig scenario's: alleen gedrag dat ertoe doet.
 
-**Wat het niet doet**
+## Risico's
 
-- Een groene test bewijst het scenario, niet dat de spec compleet is. Daarvoor blijft
-  de review nodig.
-- Handmatige scenario's zijn zo goed als het toegankelijkheidsverslag.
-- Niets controleert automatisch of elk scenario een test heeft. Zie Open punten.
+| Risico | Maatregel |
+|---|---|
+| Een scenario heeft geen test, en niemand merkt het | Review per change met de vraag "welke test hoort hierbij?". Later een CI-script dat dit controleert (zie Herzien als). |
+| De spec is onvolledig: de tests zijn groen, maar het belangrijke gedrag ontbreekt | De developer reviewt elk voorstel vóór er code komt. |
+| De test bewijst iets anders dan het scenario zegt | Elke THEN in het scenario krijgt een eigen controle in de test, in dezelfde volgorde. Bij de review loop je ze naast elkaar langs. |
+| Handmatige scenario's worden overgeslagen | Ze staan als taak in `tasks.md`, en archiveren mag pas als ze gedaan zijn (afspraak 7). |
+| Testnamen lopen uit de pas met de spec na een wijziging | Spec en test veranderen in dezelfde change (afspraak 6). |
+
+## Controle
+
+- Bij elke review: kies een scenario en zoek de test op titel. Die moet er zijn.
+- Bij archiveren: de lijst uit afspraak 7 is afgevinkt.
+- Handmatige scenario's staan in `docs/toegankelijkheidsverslag.md` of in de pull request.
 
 ## Overwogen alternatieven
 
@@ -107,8 +116,8 @@ committen we direct.
 - **Trede 3.** De code en de types bevatten de details al. Specs die dat herhalen,
   lopen uit de pas.
 
-## Open punten
+## Herzien als
 
-- **Automatische controle van de koppeling.** Een klein script in CI kan elke
-  scenariotitel zoeken en falen als er geen test bij is. Dat bouwen we niet nu, maar pas
-  als er genoeg specs zijn.
+- Er zoveel specs zijn dat met de hand zoeken niet meer werkt. Dan komt er een klein
+  CI-script dat elke scenariotitel zoekt en faalt als er geen test bij is.
+- Scenario's vaak zonder test blijken te zijn. Dan is "licht" niet genoeg.

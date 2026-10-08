@@ -51,7 +51,7 @@ controles in de test (ADR-0001).
 |---|---|---|
 | Commando | `pnpm test` (of `pnpm test:watch`) | `pnpm test:e2e` |
 | Bestanden | `*.test.ts(x)` naast de code | `e2e/**/*.spec.ts` |
-| Tools | Vitest, Testing Library, `fastify.inject()` | Playwright, `@axe-core/playwright` |
+| Tools | Vitest, Testing Library, `app.request()` van Hono | Playwright, `@axe-core/playwright` |
 | Nodig | Niets. Database in het geheugen. | Start zelf app en API |
 | Lokaal | Wanneer je wilt | Alleen als je ze zelf start |
 | CI | `ci.yml`: bij elke push en pull request | `e2e.yml`: via de knop en bij een pull request naar `main` |
@@ -78,10 +78,24 @@ controles in de test (ADR-0001).
 **Wat het kost**
 
 - Browsers installeren is de traagste stap in CI. Een run duurt een paar minuten.
-- Een push kan een browsertest breken zonder dat je het meteen ziet. Dat accepteren we,
-  want de pull request naar `main` vangt het op.
 - Het cv noemt Cypress en Selenium, niet Playwright. Deze ADR legt uit waarom het hier
   toch Playwright is.
+
+## Risico's
+
+| Risico | Maatregel |
+|---|---|
+| Een push breekt een browsertest, en je merkt het pas later | De pull request naar `main` draait de browsertests altijd. Branch protection blokkeert mergen bij rood. |
+| Browsertests falen af en toe zonder echte fout (flaky) | Playwright wacht zelf op elementen. In CI één herhaling, en de trace laat zien wat er gebeurde. Een flaky test lossen we op, we zetten hem niet uit. |
+| Branch protection staat niet aan, en de afspraak geldt alleen op papier | Het instellen is een taak in de eerste change. Je controleert het met een test-pull-request die rood is. |
+| De CI-run wordt te traag door drie browsers | Er zijn nu weinig tests. Wordt het te traag, dan draait WebKit alleen nog bij een pull request. |
+| Een update van Playwright verandert gedrag | Dependabot opent er een pull request voor, en de browsertests draaien daarop. |
+
+## Controle
+
+- `ci.yml` en `e2e.yml` staan als verplichte checks op `main`.
+- `pnpm test` draait zonder server. Probeer het met niets anders aan.
+- De bestandsnamen volgen de tabel: `*.test.ts(x)` of `e2e/**/*.spec.ts`.
 
 ## Overwogen alternatieven
 
@@ -94,3 +108,8 @@ controles in de test (ADR-0001).
 - **Alleen jest-axe.** Draait zonder echte browser, dus geen kleuren, focus of
   toetsenbord. Juist dat moet dit project laten zien. Per component controleren we
   tijdens het bouwen met de a11y-addon van Storybook.
+
+## Herzien als
+
+- Een browsertest-run langer duurt dan ongeveer 10 minuten.
+- Er vaak fouten in `main` komen die een browsertest bij een push had gevonden.

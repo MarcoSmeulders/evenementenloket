@@ -1,0 +1,61 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+h1 {
+  font-size: var(--font-size-heading-1);
+  line-height: var(--line-height-heading);
+  margin: 0 0 var(--space-4);
+  /* Long words must wrap instead of widening the page (large text on phones). */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+p {
+  margin: 0 0 var(--space-3);
+  max-width: var(--content-max-width);
+}
+
+a {
+  color: var(--color-link);
+  text-underline-offset: 0.15em;
+}
+
+:focus-visible {
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
+}
+
+/*
+ * Hidden on screen, still read by screen readers. Do not replace with display: none or
+ * visibility: hidden: those hide the text from screen readers too.
+ */
+.visually-hidden {
+  /* Out of the page flow, so it never pushes other content aside. */
+  position: absolute;
+  /* 1px, not 0: some screen readers skip elements without size. */
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  /* Keep the text inside the tiny box... */
+  overflow: hidden;
+  /* ...and hide even that last pixel. clip-path works on any element, not only images;
+     inset(50%) moves all four edges to the middle, so nothing is drawn. It replaces the
+     deprecated clip: rect(0 0 0 0). */
+  clip-path: inset(50%);
+  /* One line, so screen readers do not read squashed words without spaces. */
+  white-space: nowrap;
+}

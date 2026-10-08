@@ -23,8 +23,9 @@ the first commit: accessibility in the spec, separate test suites, and CI that r
   Gemeente Kranswijk.
 - Add **Storybook** inside `apps/web` with the a11y addon, with stories for the page-frame
   components.
-- Create the **API** (Fastify) with a health endpoint, configuration validated with Zod at
-  startup, and logging that never writes authorization headers.
+- Create the **API** (Hono) with a health endpoint, configuration validated with Zod at
+  startup, and logging that never writes authorization headers. The web app gets a typed
+  client for the API (`hc`), so route and response changes show up as type errors.
 - Split **tests** into `pnpm test` (Vitest, no browser) and `pnpm test:e2e` (Playwright +
   axe, starts web and API itself), as decided in ADR-0002.
 - Add **CI** with GitHub Actions: `ci.yml` on every push and pull request (secret scan,
@@ -54,7 +55,7 @@ None. There are no existing specs.
 
 - **New code:** `apps/web`, `apps/api`, `packages/schema`, `e2e/`, `.github/`.
 - **New runtime dependencies:** react, react-dom, react-router, i18next, react-i18next
-  (web); fastify, zod (api, schema). Each is justified in `design.md`.
+  (web); hono, @hono/node-server, pino, zod (api, schema). Each is justified in `design.md`.
 - **New dev dependencies:** TypeScript, Vite, Vitest, Testing Library, Playwright,
   `@axe-core/playwright`, ESLint (+ plugins), Prettier, Storybook (+ a11y addon), tsx.
 - **Repository settings (manual, outside code):** secret scanning with push protection,

@@ -1,5 +1,22 @@
 schema: spec-driven
 
+context: |
+  Evenementenloket Kranswijk: a public portfolio project. Organisers report a small event to
+  the fictional Gemeente Kranswijk (multi-step form, draft saved on the server, resume via a
+  secret link, submit, follow the status). A case handler reviews, asks for information, decides.
+  Goal: show WCAG 2.2 AA in practice, React + TypeScript, and a small, well-designed API.
+  Stack: pnpm workspace; apps/web (React 19, Vite, React Router, react-i18next, Storybook),
+  apps/api (Hono, typed client for the web app), packages/schema (Zod, shared by web and api), e2e/ (Playwright + axe).
+  Rules:
+  - One scenario, one test with the scenario title as test name; scenarios that cannot be
+    automated are marked "- **Verification:** manual" (docs/adr/0001).
+  - Accessibility requirements are part of each change's specs, not added afterwards.
+  - Dutch only in the UI; no interface text in code, all text in nl.json.
+  - No Redux, no functional-programming libraries. New runtime dependencies need a reason.
+  - Size budget: about 3,000 lines of non-test TypeScript.
+  - Public repository: no secrets, real personal data or infrastructure details.
+  - OpenSpec artifacts in English; ADRs and other docs in Dutch. Write simply.
+
 # Project context (optional)
 # Add only constraints that should guide OpenSpec artifacts and workflows.
 # Include constraints an agent cannot infer by reading the code.
