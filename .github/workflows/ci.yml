@@ -1,9 +1,12 @@
-# Fast checks on every push and pull request (ADR-0002).
+# Fast checks on every push to develop, on every merge into main, and by hand
+# (ADR-0002, ADR-0007). The release pull request to main reuses the results from develop:
+# required checks are tied to the commit. The run on main checks the merge commit itself.
 name: CI
 
 on:
+  workflow_dispatch:
   push:
-  pull_request:
+    branches: [develop, main]
 
 permissions:
   contents: read

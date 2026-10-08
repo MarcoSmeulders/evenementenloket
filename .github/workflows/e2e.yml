@@ -1,13 +1,11 @@
-# Browser tests: on every push to develop, on every pull request to main, and by hand
-# (ADR-0002, ADR-0007).
+# Browser tests on every push to develop, and by hand (ADR-0002, ADR-0007). The release
+# pull request to main reuses these results: required checks are tied to the commit.
 name: E2E
 
 on:
   workflow_dispatch:
   push:
     branches: [develop]
-  pull_request:
-    branches: [main]
 
 permissions:
   contents: read

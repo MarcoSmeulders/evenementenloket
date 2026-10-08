@@ -51,7 +51,7 @@ Alles heeft een standaardwaarde. Wil je iets aanpassen, kopieer het bestand dan 
 | Commando         | Wat het doet                                                                                    | Wanneer                                                                                          |
 | ---------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `pnpm test`      | Unit-tests (Vitest). Geen browser of server nodig.                                              | Vaak, of `pnpm test:watch`                                                                       |
-| `pnpm test:e2e`  | Browsertests (Playwright + axe) in Chromium, Firefox en WebKit. Start zelf de API en de webapp. | Met de hand, of in CI bij een push naar `develop` en een pull request naar `main`                |
+| `pnpm test:e2e`  | Browsertests (Playwright + axe) in Chromium, Firefox en WebKit. Start zelf de API en de webapp. | Met de hand, of in CI bij elke push naar `develop`                                               |
 | `pnpm lint`      | ESLint, met regels voor toegankelijkheid en tegen hardcoded tekst                               | Voor elke commit                                                                                 |
 | `pnpm typecheck` | TypeScript-controle van alle onderdelen                                                         | Voor elke commit                                                                                 |
 | `pnpm run audit` | Controleert de packages op bekende kwetsbaarheden (high en critical)                            | Bij elke push in CI, en in de update-routine ([ADR-0008](docs/adr/0008-eigen-update-routine.md)) |
@@ -65,9 +65,10 @@ drie de browsers. Zodra een Playwright-update WebKit op 26.04
 ondersteunt, vervallen deze uitzondering en de vastgezette versie in CI
 ([issue #1](https://github.com/MarcoSmeulders/evenementenloket/issues/1)).
 
-In CI draaien de snelle checks bij elke push. De browsertests draaien bij elke push naar
-`develop`, bij een pull request naar `main`, of als je ze start via het tabblad Actions
-([ADR-0002](docs/adr/0002-playwright-for-browser-tests.md)).
+In CI draaien de snelle checks en de browsertests bij elke push naar `develop`, of als je ze
+start via het tabblad Actions. Na een merge in `main` draaien de snelle checks nog één keer. De release-PR naar `main` gebruikt die uitslag en draait ze
+niet opnieuw ([ADR-0002](docs/adr/0002-playwright-for-browser-tests.md),
+[ADR-0007](docs/adr/0007-branches-main-en-develop.md)).
 
 ## Opbouw
 

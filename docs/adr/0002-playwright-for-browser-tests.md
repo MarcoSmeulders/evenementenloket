@@ -57,12 +57,13 @@ controles in de test (ADR-0001).
 | Tools | Vitest, Testing Library, `app.request()` van Hono | Playwright, `@axe-core/playwright` |
 | Nodig | Niets. Database in het geheugen. | Start zelf app en API |
 | Lokaal | Wanneer je wilt | Alleen als je ze zelf start |
-| CI | `ci.yml`: bij elke push en pull request | `e2e.yml`: via de knop, bij elke push naar `develop` en bij een pull request naar `main` |
+| CI | `ci.yml`: bij elke push naar `develop`, na elke merge in `main`, en via de knop | `e2e.yml`: bij elke push naar `develop`, en via de knop |
 
 - Vitest kijkt nooit in `e2e/`. Playwright kijkt alleen in `e2e/`.
 - `ci.yml` doet lint, typecheck, unit-tests en build. Je weet dus snel of een push goed is.
-- `e2e.yml` is een aparte workflow. Hij draait bij elke push naar `develop` en bij elke pull
-  request naar `main`. Zo komt er niets ongetest in `main`.
+- `e2e.yml` is een aparte workflow. Hij draait bij elke push naar `develop`. De
+  release-PR naar `main` gebruikt die uitslag, want verplichte checks horen bij de commit.
+  Zo komt er niets ongetest in `main`, zonder dat alles twee keer draait.
 - Faalt een browsertest, dan bewaart CI het rapport om te downloaden.
 - Geen van beide workflows heeft wachtwoorden of sleutels nodig.
 - In de instellingen van GitHub stellen we in dat mergen naar `main` pas kan als beide
@@ -88,10 +89,10 @@ controles in de test (ADR-0001).
 
 | Risico | Maatregel |
 |---|---|
-| Een push breekt een browsertest, en je merkt het pas later | De pull request naar `main` draait de browsertests altijd. Branch protection blokkeert mergen bij rood. |
+| Een push breekt een browsertest, en je merkt het pas later | De browsertests draaien bij elke push naar `develop`. De ruleset op `main` blokkeert de release-PR zolang ze rood zijn. |
 | Browsertests falen af en toe zonder echte fout (flaky) | Playwright wacht zelf op elementen. In CI één herhaling, en de trace laat zien wat er gebeurde. Een flaky test lossen we op, we zetten hem niet uit. |
 | Branch protection staat niet aan, en de afspraak geldt alleen op papier | Het instellen is een taak in de eerste change. Je controleert het met een test-pull-request die rood is. |
-| De CI-run wordt te traag door drie browsers | Er zijn nu weinig tests. Wordt het te traag, dan draait WebKit alleen nog bij een pull request. |
+| De CI-run wordt te traag door drie browsers | Er zijn nu weinig tests. Wordt het te traag, dan draait WebKit alleen nog met de hand, bijvoorbeeld vóór een release. |
 | Een update van Playwright verandert gedrag | Updates gaan via de update-routine (ADR-0008) op `develop`, en de browsertests draaien daarop. |
 
 ## Controle

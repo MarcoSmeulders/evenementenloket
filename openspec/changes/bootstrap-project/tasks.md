@@ -64,7 +64,7 @@
 ## 10. Integration and manual checks
 
 - [ ] 10.1 Developer action (GitHub settings): enable secret scanning with push protection, Dependabot alerts, and branch protection on `main` that requires `ci` and `e2e`; verify a test pull request cannot be merged while a check is red
-- [ ] 10.2 Manual check `quality-gates` scenarios (`unit tests run without servers`, `browser tests start what they need`, `failing unit test fails the run`, `pull request to main runs browser tests`, `push does not run browser tests`, `committed credential fails the scan`) on a throwaway branch; record the outcome per scenario in the pull request description
+- [ ] 10.2 Manual check `quality-gates` scenarios (`unit tests run without servers`, `browser tests start what they need`, `failing unit test fails the run`, `push to develop runs browser tests`, `release pull request reuses the results`, `committed credential fails the scan`) on a throwaway branch; record the outcome per scenario in the pull request description
 - [ ] 10.3 Manual check `page-shell: Visible focus` › `focus indicator is visible on every interactive element` with the keyboard in Chromium, Firefox and Safari; record the outcome in `docs/toegankelijkheidsverslag.md` (Dutch)
 - [x] 10.4 Run a sweep over the whole repo (case-insensitive) for origin-project names, private IP addresses, hostnames and home paths; verify zero hits before the first push
 - [x] 10.5 Run `/loket-ux-reviewer` on the start page; verify a report exists in `docs/ux-reviews/` and that every high-severity finding is fixed or recorded with a reason
