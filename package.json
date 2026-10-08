@@ -3,7 +3,7 @@
   "private": true,
   "description": "Evenementenloket Kranswijk: a portfolio project for reporting small events to a fictional municipality",
   "type": "module",
-  "packageManager": "pnpm@11.12.0",
+  "packageManager": "pnpm@11.28.2",
   "engines": {
     "node": ">=24"
   },
