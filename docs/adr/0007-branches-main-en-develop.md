@@ -34,9 +34,10 @@ leggen we hier vast, zodat je ze kunt nagaan en zo nodig opnieuw kunt instellen.
 - **Een release** is een pull request van `develop` naar `main`.
 - **Overal een normale merge** (merge commit). Squash en rebase staan uit in de
   instellingen van de repository.
-- **Tests:** `checks` draait bij elke push en elke pull request. `e2e` draait bij elke push
-  naar `develop`, bij een pull request naar `main`, en met de hand (ADR-0002).
-- **Dependabot** opent zijn pull requests naar `develop`, want dat is de standaardbranch.
+- **Tests:** `checks` en `e2e` draaien bij elke push naar `develop`, en met de hand
+  (ADR-0002). Ze draaien niet opnieuw bij de release-PR: verplichte checks horen bij de
+  commit, dus de PR gebruikt de uitslag van de push naar `develop`. Na de merge in `main`
+  draait `checks` nog één keer, op de merge commit zelf.
 
 ### Regels op GitHub (rulesets)
 

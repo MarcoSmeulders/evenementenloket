@@ -162,20 +162,23 @@ TypeScript directly, so there is no build or watch step for the package.
 
 ### D9. CI: GitHub Actions
 
-- `ci.yml` (push, pull_request): checkout with full history → gitleaks → pnpm + Node from
+- `ci.yml` (push to `develop` and `main`, `workflow_dispatch`): checkout with full history → gitleaks → pnpm + Node from
   `.nvmrc` with pnpm cache → `pnpm install --frozen-lockfile` → lint → typecheck →
   `pnpm test` → build (web, api, Storybook).
-- `e2e.yml` (`workflow_dispatch`, pull_request to `main`): same setup → cache Playwright
+- `e2e.yml` (push to `develop`, `workflow_dispatch`): same setup → cache Playwright
   browsers by version → `playwright install --with-deps` → `pnpm test:e2e` → upload
   `playwright-report/` when it fails.
+- Neither workflow runs on `pull_request`. Required checks are tied to the commit, so the
+  release pull request to `main` reuses the results of the push to `develop` (ADR-0007).
+  `ci.yml` also runs after a merge into `main`, to check the merge commit itself.
 - **Secret scan:** the official gitleaks container image (pinned version), run directly
   in the workflow. It scans the full history on every push, because anything ever
   committed is public. The `gitleaks-action` was tried first: it only scans the pushed
   commits and failed on the first push of the repository, which has no parent commit.
-- **Dependabot:** `.github/dependabot.yml` for npm and GitHub Actions, weekly, with
-  grouped minor and patch updates to keep the noise down.
+- **Dependency updates:** first planned with Dependabot; replaced by `pnpm audit` in the
+  fast checks and a manual update routine (ADR-0008). Dependabot alerts stay on.
 - Actions are pinned to a major version (`@v4`). Pinning to a commit SHA is more secure
-  but harder to read. Dependabot keeps the versions current.
+  but harder to read. The update routine checks the versions.
 
 ### D10. Project docs
 
@@ -202,8 +205,8 @@ TypeScript directly, so there is no build or watch step for the package.
 - [The schema package exported as `.ts` breaks a tool that expects JS] → the API is
   bundled for production, and Vite and Vitest support `.ts` directly. If a tool still
   breaks, ADR-0003 names building to `dist/` as the fallback.
-- [Storybook major versions change often, and Dependabot PRs may break stories] → CI
-  builds Storybook, so a breaking update fails its PR instead of reaching `main`.
+- [Storybook major versions change often, and an update may break stories] → CI builds
+  Storybook, so a breaking update fails on `develop` instead of reaching `main`.
 - [Three browser engines make the e2e run slower] → only a few tests exist now. If the
   run takes too long later, WebKit can move to the pull-request run only.
 - [gitleaks false positives on test fixtures] → a `.gitleaks.toml` allow-list for

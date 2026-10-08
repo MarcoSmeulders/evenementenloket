@@ -46,7 +46,7 @@ system. Dat loont als meerdere apps dezelfde componenten gebruiken. Hier is er Ã
 
 | Risico | Maatregel |
 |---|---|
-| Een update van Storybook breekt de stories | CI bouwt Storybook, dus de pull request van Dependabot wordt rood en komt niet in `main`. |
+| Een update van Storybook breekt de stories | CI bouwt Storybook bij elke push. Een kapotte update wordt rood op `develop` en komt niet in `main` (update-routine, ADR-0008). |
 | Stories lopen achter op het component | Een nieuwe toestand van een component hoort bij dezelfde change als de story. Dat staat in de taken. |
 | De a11y-addon toont fouten, maar niemand kijkt | De addon staat op "error", zodat een fout opvalt. Voor elke change draaien we axe ook in de browsertests. |
 | Componenten groeien naar een design system, zonder dat iemand dat besluit | Een apart package komt er pas met een nieuwe ADR, als er een tweede gebruiker is. |

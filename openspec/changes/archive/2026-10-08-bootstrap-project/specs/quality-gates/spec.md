@@ -22,27 +22,30 @@ network access. The browser command SHALL start the web app and the API itself.
 - **THEN** the web app and the API are started, the browser tests run, and both are stopped afterwards
 - **Verification:** manual
 
-### Requirement: Fast checks on every push
-Every push and every pull request SHALL run the secret scan, lint, type check, unit
-tests and build. If any of them fails, the run SHALL be reported as failed.
+### Requirement: Fast checks on every push to develop and main
+Every push to `develop` and every merge into `main` SHALL run the secret scan, dependency
+audit, lint, type check, unit tests and build, and the developer SHALL be able to start
+them by hand. If any of
+them fails, the run SHALL be reported as failed.
 
 #### Scenario: failing unit test fails the run
-- **WHEN** a commit with a failing unit test is pushed
+- **WHEN** a commit with a failing unit test is pushed to `develop`
 - **THEN** the fast checks are reported as failed on that commit
 - **Verification:** manual
 
-### Requirement: Browser tests on demand and before merging
-Browser tests SHALL run when the developer starts them by hand and on every pull request
-to `main`. A normal push SHALL NOT start them.
+### Requirement: Browser tests on every push to develop and before release
+Browser tests SHALL run on every push to `develop` and when the developer starts them by
+hand. A pull request to `main` SHALL only be mergeable when the fast checks and the
+browser tests passed on its head commit; it SHALL NOT run them a second time.
 
-#### Scenario: pull request to main runs browser tests
-- **WHEN** a pull request to `main` is opened or updated
+#### Scenario: push to develop runs browser tests
+- **WHEN** a commit is pushed to `develop`
 - **THEN** the browser tests run, and the report is kept for download when they fail
 - **Verification:** manual
 
-#### Scenario: push does not run browser tests
-- **WHEN** a commit is pushed to a branch without a pull request
-- **THEN** only the fast checks run
+#### Scenario: release pull request reuses the results
+- **WHEN** a pull request from `develop` to `main` is opened
+- **THEN** it shows the fast checks and browser tests from the push to `develop`, no new runs start, and merging is blocked unless both passed
 - **Verification:** manual
 
 ### Requirement: No hard-coded interface text
