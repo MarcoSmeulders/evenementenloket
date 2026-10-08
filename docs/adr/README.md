@@ -12,6 +12,7 @@ wat het kost. Zo kun je later zien waarom iets zo is, ook als niemand het meer w
 | [0005](0005-i18n-alleen-nederlands-geen-hardcoded-tekst.md) | i18n met alleen Nederlands, en geen hardcoded tekst |
 | [0006](0006-hono-met-getypeerde-client.md) | Hono voor de API, met een getypeerde client |
 | [0007](0007-branches-main-en-develop.md) | Branches main en develop, met een beschermde main |
+| [0008](0008-eigen-update-routine.md) | Eigen update-routine en dependency-audit, geen Dependabot |
 
 ## Opbouw van een ADR
 

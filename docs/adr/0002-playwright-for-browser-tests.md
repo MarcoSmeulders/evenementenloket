@@ -92,7 +92,7 @@ controles in de test (ADR-0001).
 | Browsertests falen af en toe zonder echte fout (flaky) | Playwright wacht zelf op elementen. In CI één herhaling, en de trace laat zien wat er gebeurde. Een flaky test lossen we op, we zetten hem niet uit. |
 | Branch protection staat niet aan, en de afspraak geldt alleen op papier | Het instellen is een taak in de eerste change. Je controleert het met een test-pull-request die rood is. |
 | De CI-run wordt te traag door drie browsers | Er zijn nu weinig tests. Wordt het te traag, dan draait WebKit alleen nog bij een pull request. |
-| Een update van Playwright verandert gedrag | Dependabot opent er een pull request voor, en de browsertests draaien daarop. |
+| Een update van Playwright verandert gedrag | Updates gaan via de update-routine (ADR-0008) op `develop`, en de browsertests draaien daarop. |
 
 ## Controle
 
