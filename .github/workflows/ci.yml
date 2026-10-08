@@ -26,8 +26,8 @@ jobs:
           # committed to a public repository counts as leaked.
           fetch-depth: 0
 
-      # Scans the whole history, not only the pushed commits. Dependabot does not update
-      # this image: bump the version by hand now and then.
+      # Scans the whole history, not only the pushed commits. Update the image version by
+      # hand in the update routine (ADR-0008).
       - name: Secret scan
         run: >-
           docker run --rm -v "$GITHUB_WORKSPACE":/repo:ro
@@ -42,6 +42,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run audit
       - run: pnpm lint
       - run: pnpm format:check
       - run: pnpm typecheck

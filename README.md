@@ -48,12 +48,13 @@ Alles heeft een standaardwaarde. Wil je iets aanpassen, kopieer het bestand dan 
 
 ## Testen
 
-| Commando         | Wat het doet                                                                                    | Wanneer                                                                           |
-| ---------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `pnpm test`      | Unit-tests (Vitest). Geen browser of server nodig.                                              | Vaak, of `pnpm test:watch`                                                        |
-| `pnpm test:e2e`  | Browsertests (Playwright + axe) in Chromium, Firefox en WebKit. Start zelf de API en de webapp. | Met de hand, of in CI bij een push naar `develop` en een pull request naar `main` |
-| `pnpm lint`      | ESLint, met regels voor toegankelijkheid en tegen hardcoded tekst                               | Voor elke commit                                                                  |
-| `pnpm typecheck` | TypeScript-controle van alle onderdelen                                                         | Voor elke commit                                                                  |
+| Commando         | Wat het doet                                                                                    | Wanneer                                                                                          |
+| ---------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `pnpm test`      | Unit-tests (Vitest). Geen browser of server nodig.                                              | Vaak, of `pnpm test:watch`                                                                       |
+| `pnpm test:e2e`  | Browsertests (Playwright + axe) in Chromium, Firefox en WebKit. Start zelf de API en de webapp. | Met de hand, of in CI bij een push naar `develop` en een pull request naar `main`                |
+| `pnpm lint`      | ESLint, met regels voor toegankelijkheid en tegen hardcoded tekst                               | Voor elke commit                                                                                 |
+| `pnpm typecheck` | TypeScript-controle van alle onderdelen                                                         | Voor elke commit                                                                                 |
+| `pnpm run audit` | Controleert de packages op bekende kwetsbaarheden (high en critical)                            | Bij elke push in CI, en in de update-routine ([ADR-0008](docs/adr/0008-eigen-update-routine.md)) |
 
 De eerste keer heb je browsers nodig voor de browsertests: `pnpm exec playwright install`.
 

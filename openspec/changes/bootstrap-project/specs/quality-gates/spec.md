@@ -23,8 +23,8 @@ network access. The browser command SHALL start the web app and the API itself.
 - **Verification:** manual
 
 ### Requirement: Fast checks on every push
-Every push and every pull request SHALL run the secret scan, lint, type check, unit
-tests and build. If any of them fails, the run SHALL be reported as failed.
+Every push and every pull request SHALL run the secret scan, dependency audit, lint,
+type check, unit tests and build. If any of them fails, the run SHALL be reported as failed.
 
 #### Scenario: failing unit test fails the run
 - **WHEN** a commit with a failing unit test is pushed
