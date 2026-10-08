@@ -168,8 +168,10 @@ TypeScript directly, so there is no build or watch step for the package.
 - `e2e.yml` (`workflow_dispatch`, pull_request to `main`): same setup → cache Playwright
   browsers by version → `playwright install --with-deps` → `pnpm test:e2e` → upload
   `playwright-report/` when it fails.
-- **Secret scan:** `gitleaks/gitleaks-action`, which is free for personal repositories.
-  It scans the full history, because anything ever committed is public.
+- **Secret scan:** the official gitleaks container image (pinned version), run directly
+  in the workflow. It scans the full history on every push, because anything ever
+  committed is public. The `gitleaks-action` was tried first: it only scans the pushed
+  commits and failed on the first push of the repository, which has no parent commit.
 - **Dependabot:** `.github/dependabot.yml` for npm and GitHub Actions, weekly, with
   grouped minor and patch updates to keep the noise down.
 - Actions are pinned to a major version (`@v4`). Pinning to a commit SHA is more secure

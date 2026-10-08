@@ -72,7 +72,7 @@ is public and is read by reviewers. See `README.md` for the overview.
 pnpm dev          # API on :3001 and web on :5173
 pnpm test         # unit tests
 pnpm test:e2e     # browser tests (starts API and web itself)
-pnpm test:e2e:local  # same, without WebKit (WebKit does not start on Ubuntu 26.04)
+pnpm test:e2e:local  # same, without WebKit (WebKit does not start on Ubuntu 26.04; issue #3)
 pnpm lint && pnpm typecheck && pnpm format:check
 pnpm storybook
 ```
