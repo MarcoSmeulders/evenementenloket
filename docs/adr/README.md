@@ -11,6 +11,7 @@ wat het kost. Zo kun je later zien waarom iets zo is, ook als niemand het meer w
 | [0004](0004-storybook-in-de-app-geen-design-system-package.md) | Storybook in de app, geen apart design-system-package |
 | [0005](0005-i18n-alleen-nederlands-geen-hardcoded-tekst.md) | i18n met alleen Nederlands, en geen hardcoded tekst |
 | [0006](0006-hono-met-getypeerde-client.md) | Hono voor de API, met een getypeerde client |
+| [0007](0007-branches-main-en-develop.md) | Branches main en develop, met een beschermde main |
 
 ## Opbouw van een ADR
 

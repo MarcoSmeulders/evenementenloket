@@ -48,24 +48,24 @@ Alles heeft een standaardwaarde. Wil je iets aanpassen, kopieer het bestand dan 
 
 ## Testen
 
-| Commando         | Wat het doet                                                                                    | Wanneer                                    |
-| ---------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `pnpm test`      | Unit-tests (Vitest). Geen browser of server nodig.                                              | Vaak, of `pnpm test:watch`                 |
-| `pnpm test:e2e`  | Browsertests (Playwright + axe) in Chromium, Firefox en WebKit. Start zelf de API en de webapp. | Met de hand, of in CI bij een pull request |
-| `pnpm lint`      | ESLint, met regels voor toegankelijkheid en tegen hardcoded tekst                               | Voor elke commit                           |
-| `pnpm typecheck` | TypeScript-controle van alle onderdelen                                                         | Voor elke commit                           |
+| Commando         | Wat het doet                                                                                    | Wanneer                                                                           |
+| ---------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `pnpm test`      | Unit-tests (Vitest). Geen browser of server nodig.                                              | Vaak, of `pnpm test:watch`                                                        |
+| `pnpm test:e2e`  | Browsertests (Playwright + axe) in Chromium, Firefox en WebKit. Start zelf de API en de webapp. | Met de hand, of in CI bij een push naar `develop` en een pull request naar `main` |
+| `pnpm lint`      | ESLint, met regels voor toegankelijkheid en tegen hardcoded tekst                               | Voor elke commit                                                                  |
+| `pnpm typecheck` | TypeScript-controle van alle onderdelen                                                         | Voor elke commit                                                                  |
 
 De eerste keer heb je browsers nodig voor de browsertests: `pnpm exec playwright install`.
 
 **WebKit op Ubuntu 26.04.** De WebKit-versie van Playwright 1.63 is gebouwd voor Ubuntu 24.04
 en start niet op 26.04 (`libicudata.so.74` ontbreekt). Gebruik daar `pnpm test:e2e:local`:
-dezelfde tests in Chromium en Firefox. CI is vastgezet op Ubuntu 24.04 en test bij elke
-pull request alle drie de browsers. Zodra een Playwright-update WebKit op 26.04
+dezelfde tests in Chromium en Firefox. CI is vastgezet op Ubuntu 24.04 en test altijd alle
+drie de browsers. Zodra een Playwright-update WebKit op 26.04
 ondersteunt, vervallen deze uitzondering en de vastgezette versie in CI
-([issue #3](https://github.com/MarcoSmeulders/evenementenloket/issues/3)).
+([issue #1](https://github.com/MarcoSmeulders/evenementenloket/issues/1)).
 
-In CI draaien de snelle checks bij elke push. De browsertests draaien bij een pull request
-naar `main`, of als je ze start via het tabblad Actions
+In CI draaien de snelle checks bij elke push. De browsertests draaien bij elke push naar
+`develop`, bij een pull request naar `main`, of als je ze start via het tabblad Actions
 ([ADR-0002](docs/adr/0002-playwright-for-browser-tests.md)).
 
 ## Opbouw
@@ -94,3 +94,7 @@ Elke wijziging begint als voorstel in OpenSpec, met eisen en scenario's. Pas na 
 wordt het gebouwd. Ik werk met Claude Code als assistent, met eigen skills en een eigen
 reviewagent. De afspraken staan in [`CLAUDE.md`](CLAUDE.md), de eigen skills en de agent in
 [`.claude/`](.claude/). Ik review en commit alles zelf.
+
+**Branches.** Ik werk op `develop`. Op `main` staat de vrijgegeven versie. Die verandert
+alleen via een pull request van `develop`, en pas als de checks en de browsertests groen
+zijn. GitHub dwingt dat af ([ADR-0007](docs/adr/0007-branches-main-en-develop.md)).

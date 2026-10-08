@@ -22,7 +22,7 @@ jobs:
     # Pinned: the WebKit build of Playwright 1.63 needs libicu 74, which Ubuntu 26.04 no
     # longer has, and ubuntu-latest moves to 26.04 in Oct-Nov 2026
     # (actions/runner-images#14748). Remove the pin once `pnpm test:e2e` passes on 26.04:
-    # https://github.com/MarcoSmeulders/evenementenloket/issues/3
+    # https://github.com/MarcoSmeulders/evenementenloket/issues/1
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:

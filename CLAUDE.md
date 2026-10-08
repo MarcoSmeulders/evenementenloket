@@ -46,6 +46,11 @@ is public and is read by reviewers. See `README.md` for the overview.
 
 ## Working habits
 
+- Work on `develop` (or a branch merged into `develop` with a normal `git merge`). Never
+  commit to `main`: it only changes through a pull request from `develop`, merged with a
+  merge commit (ADR-0007). Never squash or rebase shared history.
+- Commits use the identity from the repository's git config. Never change `user.name` or
+  `user.email`.
 - After changing code, run `pnpm lint && pnpm typecheck && pnpm test` and fix what fails
   before reporting the work as done.
 - Look up current library docs with Context7 instead of relying on memory.
@@ -72,7 +77,7 @@ is public and is read by reviewers. See `README.md` for the overview.
 pnpm dev          # API on :3001 and web on :5173
 pnpm test         # unit tests
 pnpm test:e2e     # browser tests (starts API and web itself)
-pnpm test:e2e:local  # same, without WebKit (WebKit does not start on Ubuntu 26.04; issue #3)
+pnpm test:e2e:local  # same, without WebKit (WebKit does not start on Ubuntu 26.04; issue #1)
 pnpm lint && pnpm typecheck && pnpm format:check
 pnpm storybook
 ```
