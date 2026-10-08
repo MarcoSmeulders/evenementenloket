@@ -17,7 +17,8 @@ CI. Dit verslag gaat over wat daarbuiten valt.
 
 **Datum:** 8 oktober 2026
 **Pagina:** startpagina (`/`), productiebuild, venster 1280 × 800
-**Uitkomst:** geslaagd
+**Uitkomst:** geslaagd. De developer heeft deze controle met Playwright, in plaats van een
+ronde met de hand, geaccepteerd als afronding van het scenario.
 
 **Hoe getest**
 
