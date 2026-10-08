@@ -50,7 +50,7 @@
 
 ## 8. CI and repository hygiene
 
-- [ ] 8.1 Add `.github/workflows/ci.yml` (push and pull_request: full-history checkout, gitleaks, pnpm and Node from `.nvmrc` with cache, install with frozen lockfile, lint, typecheck, `pnpm test`, build of web, api and Storybook); verify the workflow passes on the first push
+- [x] 8.1 Add `.github/workflows/ci.yml` (push and pull_request: full-history checkout, gitleaks, pnpm and Node from `.nvmrc` with cache, install with frozen lockfile, lint, typecheck, `pnpm test`, build of web, api and Storybook); verify the workflow passes on the first push
 - [ ] 8.2 Add `.github/workflows/e2e.yml` (`workflow_dispatch` and pull_request to `main`: same setup, cached Playwright browsers, `pnpm test:e2e`, upload of `playwright-report/` on failure); verify a manual run passes
 - [ ] 8.3 Add `.github/dependabot.yml` for npm and GitHub Actions (weekly, minor and patch grouped); verify GitHub shows the config as valid under Insights › Dependency graph › Dependabot
 

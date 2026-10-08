@@ -7,6 +7,11 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Keep @types/node on the Node major in .nvmrc (24, LTS). Remove this rule when
+      # upgrading Node itself.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
