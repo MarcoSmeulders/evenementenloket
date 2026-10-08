@@ -16,7 +16,7 @@ jobs:
   checks:
     name: checks
     # Pinned: ubuntu-latest moves to 26.04 in Oct-Nov 2026 (actions/runner-images#14748).
-    # Keep it equal to the runner in e2e.yml. Removing the pin: https://github.com/MarcoSmeulders/evenementenloket/issues/3
+    # Keep it equal to the runner in e2e.yml. Removing the pin: https://github.com/MarcoSmeulders/evenementenloket/issues/1
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:

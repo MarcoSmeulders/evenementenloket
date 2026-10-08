@@ -6,6 +6,9 @@ status: geaccepteerd
 
 # ADR-0002: Playwright voor browsertests, gescheiden van unit-tests
 
+> **Aangevuld door [ADR-0007](0007-branches-main-en-develop.md):** de browsertests draaien
+> ook bij elke push naar `develop`, en wijzigingen komen via `develop` op `main`.
+
 ## Context
 
 Veel van wat dit project moet laten zien, werkt alleen in een echte browser. Denk aan
@@ -54,12 +57,12 @@ controles in de test (ADR-0001).
 | Tools | Vitest, Testing Library, `app.request()` van Hono | Playwright, `@axe-core/playwright` |
 | Nodig | Niets. Database in het geheugen. | Start zelf app en API |
 | Lokaal | Wanneer je wilt | Alleen als je ze zelf start |
-| CI | `ci.yml`: bij elke push en pull request | `e2e.yml`: via de knop en bij een pull request naar `main` |
+| CI | `ci.yml`: bij elke push en pull request | `e2e.yml`: via de knop, bij elke push naar `develop` en bij een pull request naar `main` |
 
 - Vitest kijkt nooit in `e2e/`. Playwright kijkt alleen in `e2e/`.
 - `ci.yml` doet lint, typecheck, unit-tests en build. Je weet dus snel of een push goed is.
-- `e2e.yml` is een aparte workflow. Een push wacht er niet op. Een pull request naar
-  `main` draait hem altijd. Zo komt er niets ongetest in `main`.
+- `e2e.yml` is een aparte workflow. Hij draait bij elke push naar `develop` en bij elke pull
+  request naar `main`. Zo komt er niets ongetest in `main`.
 - Faalt een browsertest, dan bewaart CI het rapport om te downloaden.
 - Geen van beide workflows heeft wachtwoorden of sleutels nodig.
 - In de instellingen van GitHub stellen we in dat mergen naar `main` pas kan als beide
@@ -72,8 +75,8 @@ controles in de test (ADR-0001).
 - Browsertests controleren ook namen, focus en toetsenbord. Dat bewijst de
   toegankelijkheidsscenario's uit ADR-0001.
 - Unit-tests blijven snel, dus je draait ze vaak.
-- Elke wijziging krijgt een eigen branch en gaat via een pull request naar `main`. De
-  checks laten zien hoe er gewerkt wordt.
+- Wijzigingen gaan via `develop` en een pull request naar `main` (ADR-0007). De checks laten
+  zien hoe er gewerkt wordt.
 
 **Wat het kost**
 
