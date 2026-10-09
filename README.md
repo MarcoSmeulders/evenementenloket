@@ -36,6 +36,18 @@ met een health check, tests en CI. Het melden zelf volgt in de volgende stappen.
 
 Je hebt Node 24 en pnpm nodig.
 
+**pnpm activeren.** pnpm komt via Corepack, dat bij Node 24 hoort. De versie staat vast in
+`package.json` (`packageManager`), dus iedereen werkt met dezelfde pnpm:
+
+```sh
+corepack enable    # één keer per Node-versie
+pnpm --version     # toont de versie uit package.json
+```
+
+Gebruik je nvm? Dan heeft elke Node-versie zijn eigen globale tools. Na `nvm install` of
+een nieuwe standaardversie (`nvm alias default ...`) is pnpm daar dus nog niet. Draai dan
+opnieuw `corepack enable`. Met `nvm use` in deze map kies je de Node-versie uit `.nvmrc`.
+
 ```sh
 pnpm install
 openspec init --tools claude   # alleen als je met Claude Code en OpenSpec werkt
