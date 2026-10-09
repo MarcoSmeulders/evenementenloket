@@ -14,8 +14,9 @@ toegankelijke formulieren, React en TypeScript, en een kleine API.
 ## Status
 
 In opbouw. Klaar is de basis: de projectstructuur, de toegankelijke paginaschil, de API
-met een health check, tests en CI. Het melden zelf volgt in de volgende stappen. Zie
-[`openspec/changes/`](openspec/changes/) voor wat er nu gebouwd wordt.
+met een health check, tests en CI. Het melden zelf volgt in de volgende stappen. De
+[roadmap](docs/roadmap.md) laat zien wat er nog komt, en
+[`openspec/changes/`](openspec/changes/) wat er nu gebouwd wordt.
 
 ## Wat je hier kunt zien
 
@@ -83,6 +84,7 @@ openspec/        Specs en wijzigingen
 
 ## Documentatie
 
+- [Roadmap](docs/roadmap.md)
 - [Beslissingen (ADR's)](docs/adr/)
 - [Handleiding voor aanvragers](docs/handleiding/aanvrager.md) (concept)
 - [Handleiding voor behandelaars](docs/handleiding/behandelaar.md) (concept)
