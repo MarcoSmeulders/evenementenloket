@@ -35,43 +35,33 @@ zijn geschreven vóór de bouw. Elke change die een scherm verandert, werkt ze b
 
 **Doel:** een organisator start een melding, vult de twee stappen in en kan later verder.
 
+Het voorstel staat in
+[`openspec/changes/add-draft-application/`](../openspec/changes/add-draft-application/).
+De manier waarop de link getoond wordt, is eerst als
+[prototype](prototypes/persoonlijke-link-interactive.html) uitgeprobeerd en
+[gereviewd](ux-reviews/ux-review_prototype-persoonlijke-link-a_2026-10-09.md).
+
 Wat erin zit:
 
-- Startpagina met wat je nodig hebt en wat er na het indienen gebeurt.
-- **Start melding** maakt een concept aan en geeft een persoonlijke link.
-  - De link bevat een geheime sleutel van 32 willekeurige bytes. De database bewaart
-    alleen een hash (SHA-256) van die sleutel. Een gelekte database opent dus geen
-    meldingen.
-  - De sleutel staat in het adres van de webapp, maar gaat als header naar de API. Zo komt
-    hij niet in de logs van de API. Pagina's sturen geen `Referer` mee
-    (`Referrer-Policy: no-referrer`).
-  - Een knop om de link te kopiëren, en een waarschuwing dat de gemeente een kwijtgeraakte
-    link niet opnieuw kan sturen.
-- Stap 1 **Organisator** en stap 2 **Evenement**, met de velden en regels uit de
-  handleiding voor aanvragers.
-- **Opslaan per stap.** Een stap met fouten wordt niet opgeslagen. Een foutsamenvatting
-  boven het formulier krijgt de focus en linkt naar elk veld. De paginatitel begint met
-  "Fout:".
-- Een bevestiging dat het concept is opgeslagen, die ook wordt voorgelezen.
-- **Verdergaan via de link:** je komt bij de eerste stap die nog niet klaar is, met je
-  antwoorden al ingevuld.
-- Een ongeldige link toont een pagina met wat je kunt doen. Die pagina verraadt niet of er
-  een melding bestaat.
-- Bij elke stapwissel gaat de focus naar de kop van de stap. De stappenindicator geeft de
-  huidige stap door aan hulpmiddelen (`aria-current="step"`).
-- SQLite voor de opslag.
+- Startpagina met wat je nodig hebt en de knop **Start melding**. Die maakt een concept aan.
+- **Persoonlijke link.** De link bevat een geheime sleutel van 32 willekeurige bytes. De
+  database bewaart alleen een hash (SHA-256). De sleutel staat in het adres van de webapp,
+  maar gaat als header naar de API, dus niet in de logs van de API. Pagina's sturen geen
+  `Referer` mee en worden niet geïndexeerd.
+- **Linkpagina** na de start en na "Opslaan en later verdergaan", met drie manieren om de
+  link te bewaren: kopiëren, naar jezelf mailen en een bladwijzer. Elk adres met een geldige
+  sleutel opent het concept.
+- Stap 1 **Organisator** en stap 2 **Evenement**, met het datum- en tijdveld van de browser.
+- **Opslaan en verder** slaat alleen een complete stap op. **Opslaan en later verdergaan**
+  slaat ook een deels ingevulde stap op, als het ingevulde formaat klopt.
+- Een foutsamenvatting die de focus krijgt. Fouten veranderen alleen bij verzenden.
+- **Verdergaan via de link:** naar de eerste stap die nog niet af is.
+- Een **controlepagina, alleen lezen**. Wijzigen en indienen komen in change 3.
+- Een link **Vorige stap**, en bij elke paginawissel gaat de focus naar de kop.
+- Opslag in SQLite via `node:sqlite`, met JSON per stap.
 
-Niet in deze change: de controlepagina en het indienen (change 3).
-
-Open beslissingen voor het voorstel:
-
-- Datumveld: het datumveld van de browser of losse velden voor dag, maand en jaar.
-- Concept opslaan als gevalideerde JSON per stap, of in losse kolommen.
-- Welke SQLite-bibliotheek.
-- TanStack Query en React Hook Form gebruiken, of genoeg hebben aan React Router en gewone
-  formulieren.
-- Waar deze change stopt: na stap 2 met een eenvoudige melding "alles opgeslagen", of met
-  een controlepagina zonder indienen.
+Niet in deze change: de links "Wijzig", het indienen en het referentienummer (change 3).
+Een prototype met losse velden voor dag, maand en jaar blijft een idee voor de casuspagina.
 
 ## 3. `add-review-and-submit` — controleren en indienen
 
@@ -81,8 +71,9 @@ Open beslissingen voor het voorstel:
   opslaan kom je terug op de controlepagina. Niets hoeft dubbel ingevuld te worden (WCAG
   3.3.7).
 - De API controleert de hele melding en zet de status van concept naar ingediend.
-- Een bevestiging met het referentienummer (zoals `EVT-2026-0042`), de link naar de status
-  en wat er nu gebeurt.
+- Pas bij het indienen krijgt de melding een referentienummer (zoals `EVT-2026-0042`). Zo
+  blijft de reeks doorlopend, zonder gaten van concepten die nooit zijn ingediend.
+- Een bevestiging met het referentienummer, de link naar de status en wat er nu gebeurt.
 - Na het indienen kan niemand de antwoorden nog wijzigen. Probeert iemand het toch, dan
   antwoordt de API met 409.
 - Een eenvoudige statuspagina.
@@ -135,6 +126,9 @@ gegevens.
 - Voorbeeldmeldingen in elke status, minstens één keer per dag teruggezet.
 - Security headers.
 
+- De webserver logt geen paden onder `/aanvraag/`, want daar staat de persoonlijke link in.
+- Een grens aan het aantal concepten dat iemand kan aanmaken.
+
 Open beslissingen: waar de demo draait, en hoe lang een concept bewaard blijft. De
 configuratie van de eigen servers komt niet in deze repository.
 
@@ -152,6 +146,11 @@ Het plan van 1 oktober 2026 is het startpunt. Dit is sindsdien anders besloten:
 | ADR's en documentatie in het Engels         | In het Nederlands; code en OpenSpec in het Engels                   | —                                                                                                         |
 | Een aparte change voor het toegankelijkheidsverslag | Het verslag groeit bij elke change                          | [ADR-0001](adr/0001-spec-driven-level-2-light.md)                                                         |
 | Drie mogelijke namen voor de gemeente       | Gemeente Kranswijk                                                  | —                                                                                                         |
+| SQLite met `better-sqlite3`                 | `node:sqlite`, ingebouwd in Node 24: geen extra dependency          | ADR-0010 (change 2)                                                                                       |
+| Referentienummer bij het aanmaken           | Bij het indienen (change 3)                                         | —                                                                                                         |
+| Een stap met fouten wordt niet opgeslagen   | "Opslaan en later verdergaan" bewaart ook een deels ingevulde stap  | ADR-0010 (change 2)                                                                                       |
+| Velden opnieuw controleren bij het verlaten | Alleen bij verzenden: een verspringende foutregel liet klikken missen | —                                                                                                       |
+| `PATCH /api/my-application`                 | `PUT /api/my-application/steps/:step`, per stap                     | —                                                                                                         |
 
 ## Grootte
 
@@ -173,10 +172,11 @@ Past een change niet in het budget, dan stelt het voorstel eerst voor wat eruit 
 
 Elk bij de change waar het speelt:
 
-- Een geheime link in plaats van inloggen voor aanvragers (link kwijt is toegang kwijt).
+- ADR-0009: een geheime link in plaats van inloggen voor aanvragers (link kwijt is toegang
+  kwijt). Change 2.
+- ADR-0010: opslag met `node:sqlite`, JSON per stap, en een schema voor een concept en voor
+  een complete stap. Change 2.
+- ADR-0011: TanStack Query en React Hook Form. Change 2.
+- ADR-0012: geen versie zonder JavaScript, en hoe de toegankelijkheid toch goed blijft.
   Change 2.
-- SQLite achter een repository-interface. Change 2.
-- Conceptgegevens als JSON per stap of in kolommen. Change 2.
-- TanStack Query en React Hook Form, of bewust niet. Change 2.
-- Geen versie zonder JavaScript, en hoe de toegankelijkheid toch goed blijft. Change 2.
 - Een demo-login voor behandelaars; echt inloggen valt buiten het project. Change 4.
