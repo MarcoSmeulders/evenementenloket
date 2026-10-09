@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prototypes - Evenementenloket Kranswijk</title>
+    <style>
+      :root {
+        --color-text: #1b2a2f;
+        --color-text-muted: #4a5a5f;
+        --color-background: #ffffff;
+        --color-surface: #eef4f3;
+        --color-primary: #0b5d5b;
+        --focus-color: #5a2ca0;
+        --line: #c9c9c2;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+          sans-serif;
+        font-size: 1.125rem;
+        line-height: 1.5;
+        color: var(--color-text);
+        background: #f4f4f1;
+      }
+
+      main {
+        max-width: 48rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin: 0 0 1rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+        margin: 0 0 0.5rem;
+      }
+
+      a {
+        color: var(--color-primary);
+      }
+
+      :focus-visible {
+        outline: 3px solid var(--focus-color);
+        outline-offset: 2px;
+      }
+
+      .card {
+        background: var(--color-background);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .meta {
+        color: var(--color-text-muted);
+        font-size: 0.9375rem;
+      }
+
+      code {
+        font-size: 0.9375rem;
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Prototypes</h1>
+      <p>
+        Voordat een scherm gebouwd wordt, maak ik soms eerst een klikbaar prototype. Zo kun je gedrag
+        beoordelen dat je op een plaatje niet ziet: waar de focus heen gaat, wat een schermlezer
+        voorleest en hoe het ene scherm in het andere overgaat. De keuze die hieruit komt, gaat als
+        eis met scenario's in OpenSpec.
+      </p>
+      <p>
+        Een prototype is losse HTML met Alpine.js, zonder server en zonder echte gegevens. Het hoort
+        niet bij de app en wordt na de keuze niet verder bijgehouden.
+      </p>
+
+      <section class="card" aria-labelledby="link-title">
+        <h2 id="link-title">
+          <a href="./persoonlijke-link-interactive.html">De persoonlijke link tonen: A of B</a>
+        </h2>
+        <p class="meta">Voor change <code>add-draft-application</code> · gekozen: A, eigen linkpagina (9 oktober 2026). A is rustiger.</p>
+        <p>
+          Hoe krijgt de aanvrager de link te zien na "Start melding" en bij "Opslaan en later
+          verdergaan"? Voorstel A gebruikt een eigen pagina, voorstel B een kader op stap 1 en een
+          dialoog. Je wisselt tussen beide in hetzelfde prototype.
+        </p>
+      </section>
+
+      <h2>Werkwijze</h2>
+      <ol>
+        <li>Prototype met de voorstellen; de developer kiest.</li>
+        <li>Toegankelijkheidsreview van de gekozen variant (WCAG 2.2 AA, APG).</li>
+        <li>Zo nodig een tweede versie met de bevindingen verwerkt.</li>
+        <li>De uitkomst gaat als eisen en scenario's in het OpenSpec-voorstel.</li>
+      </ol>
+
+      <h2>Openen</h2>
+      <p>
+        De prototypes laden hun voorbeeldgegevens met <code>fetch</code>. Dat werkt niet als je het
+        bestand direct opent. Start een kleine webserver:
+      </p>
+      <p><code>npx http-server docs/prototypes</code></p>
+    </main>
+  </body>
+</html>

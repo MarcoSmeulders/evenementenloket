@@ -1,0 +1,11 @@
+{
+  "linkBase": "https://evenementenloket.example.org/aanvraag/",
+  "token": "_Q_NL3Gbh7YHOiVPFcjABOm90VmaA78o1D7x76yIGaI",
+  "voorbeeld": {
+    "soort": "organisatie",
+    "organisatie": "Bewonersvereniging Kastanjelaan",
+    "naam": "Sanne de Vries",
+    "email": "sanne@example.org",
+    "telefoon": ""
+  }
+}

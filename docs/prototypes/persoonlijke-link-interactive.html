@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Startpagina - Evenementenloket Kranswijk (prototype)</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js" defer></script>
+    <style>
+      /* Design tokens, copied from apps/web/src/styles/tokens.css. */
+      :root {
+        --color-text: #1b2a2f;
+        --color-text-muted: #4a5a5f;
+        --color-background: #ffffff;
+        --color-surface: #eef4f3;
+        --color-primary: #0b5d5b;
+        --color-link: var(--color-primary);
+        --focus-color: #5a2ca0;
+        --focus-width: 3px;
+        --focus-offset: 2px;
+        --font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+          sans-serif;
+        --font-size-small: 0.875rem;
+        --font-size-body: 1.125rem;
+        --font-size-large: 1.375rem;
+        --font-size-heading-1: 2rem;
+        --line-height-body: 1.5;
+        --line-height-heading: 1.2;
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 1rem;
+        --space-4: 1.5rem;
+        --space-5: 2rem;
+        --space-6: 3rem;
+        --content-max-width: 45rem;
+        --border-accent: 4px solid var(--color-primary);
+        --radius: 4px;
+
+        /* Proposed, not in tokens.css yet: error colour (6.5:1 on white). */
+        --color-error: #b3261e;
+
+        /* Prototype chrome only, never part of the app. */
+        --proto-ink: #3d3d3d;
+        --proto-paper: #f4f4f1;
+        --proto-line: #c9c9c2;
+        --proto-exists: #dcefe2;
+        --proto-exists-ink: #1f5130;
+        --proto-new: #fbeccb;
+        --proto-new-ink: #5c4300;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font-family);
+        font-size: var(--font-size-body);
+        line-height: var(--line-height-body);
+        color: var(--color-text);
+        background: var(--proto-paper);
+      }
+
+      :focus-visible {
+        outline: var(--focus-width) solid var(--focus-color);
+        outline-offset: var(--focus-offset);
+      }
+
+      [x-cloak] {
+        display: none !important;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        border: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      /* ---------- Prototype chrome ---------- */
+      .proto {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: var(--space-4) var(--space-3) var(--space-6);
+        color: var(--proto-ink);
+        font-size: 1rem;
+      }
+
+      .proto__eyebrow {
+        font-size: 0.75rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin: 0 0 var(--space-1);
+      }
+
+      .proto__title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 0 var(--space-2);
+      }
+
+      .proto__gloss {
+        margin: 0 0 var(--space-2);
+        max-width: 48rem;
+      }
+
+      .proto a {
+        color: var(--color-primary);
+      }
+
+      .proto__controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-3) var(--space-5);
+        align-items: flex-end;
+        margin: var(--space-4) 0;
+        padding: var(--space-3);
+        background: var(--color-background);
+        border: 1px solid var(--proto-line);
+        border-radius: 8px;
+      }
+
+      .proto__controls fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      .proto__controls legend {
+        font-weight: 700;
+        padding: 0;
+        margin-bottom: var(--space-1);
+      }
+
+      .proto__switch {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+
+      .proto__switch label {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-2) var(--space-3);
+        border: 1px solid var(--proto-line);
+        border-radius: 100px;
+        cursor: pointer;
+      }
+
+      .proto__switch label:has(input:checked) {
+        border-color: var(--color-primary);
+        background: var(--color-surface);
+        font-weight: 700;
+      }
+
+      .proto__switch label:has(input:focus-visible) {
+        outline: var(--focus-width) solid var(--focus-color);
+        outline-offset: var(--focus-offset);
+      }
+
+      .proto__switch input:focus-visible {
+        outline: none;
+      }
+
+      .proto__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+
+      .proto__variant-text {
+        margin: var(--space-2) 0 0;
+        max-width: 30rem;
+      }
+
+      .proto__jump-label {
+        align-self: center;
+        font-weight: 700;
+      }
+
+      .proto__error {
+        border-left: 4px solid var(--color-error);
+        background: var(--color-background);
+        padding: var(--space-2) var(--space-3);
+        font-weight: 600;
+      }
+
+      .proto__button {
+        font: inherit;
+        padding: var(--space-2) var(--space-3);
+        border: 1px solid var(--proto-ink);
+        border-radius: var(--radius);
+        background: var(--color-background);
+        color: var(--proto-ink);
+        cursor: pointer;
+        min-height: 2.75rem;
+      }
+
+      .proto__frame-label {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        margin: 0 0 var(--space-1);
+      }
+
+      .proto__frame {
+        border: 2px dashed var(--proto-line);
+        border-radius: 8px;
+        background: var(--color-background);
+        overflow: hidden;
+      }
+
+      /* ---------- The app, as the applicant would see it ---------- */
+      .app {
+        display: flex;
+        flex-direction: column;
+        min-height: 36rem;
+        position: relative;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: var(--space-2);
+        left: var(--space-2);
+        z-index: 10;
+        padding: var(--space-2) var(--space-3);
+        background: var(--color-background);
+        color: var(--color-link);
+        font-weight: 600;
+        border-radius: var(--radius);
+        transform: translateY(-200%);
+      }
+
+      .skip-link:focus {
+        position: static;
+        display: inline-block;
+        margin: var(--space-2) var(--space-3) 0;
+        transform: none;
+      }
+
+      .app__header {
+        border-bottom: var(--border-accent);
+        padding: var(--space-3);
+      }
+
+      .app__home-link {
+        display: inline-flex;
+        flex-direction: column;
+        max-width: 100%;
+        text-decoration: none;
+        color: var(--color-text);
+      }
+
+      .app__service {
+        font-size: var(--font-size-large);
+        font-weight: 700;
+        color: var(--color-primary);
+        overflow-wrap: anywhere;
+      }
+
+      .app__municipality {
+        font-size: var(--font-size-small);
+      }
+
+      .app__main {
+        flex: 1;
+        width: 100%;
+        max-width: calc(var(--content-max-width) + 2 * var(--space-3));
+        padding: var(--space-5) var(--space-3);
+      }
+
+      .app__main:focus,
+      .app h1:focus,
+      .app h2:focus,
+      .error-summary:focus-visible {
+        outline: none;
+      }
+
+      .error-summary:focus {
+        outline: var(--focus-width) solid var(--focus-color);
+        outline-offset: var(--focus-offset);
+      }
+
+      .app__footer {
+        background: var(--color-surface);
+        padding: var(--space-4) var(--space-3);
+        font-size: var(--font-size-small);
+        color: var(--color-text-muted);
+      }
+
+      .app h1 {
+        font-size: var(--font-size-heading-1);
+        line-height: var(--line-height-heading);
+        margin: 0 0 var(--space-4);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+      }
+
+      .app h2 {
+        font-size: var(--font-size-large);
+        line-height: var(--line-height-heading);
+        margin: 0 0 var(--space-3);
+      }
+
+      .app p,
+      .app ul {
+        margin: 0 0 var(--space-3);
+        max-width: var(--content-max-width);
+      }
+
+      .app a {
+        color: var(--color-link);
+        text-underline-offset: 0.15em;
+      }
+
+      .caption {
+        display: block;
+        font-size: var(--font-size-body);
+        font-weight: 400;
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-1);
+      }
+
+      /* Buttons */
+      .button {
+        font: inherit;
+        font-weight: 600;
+        display: inline-block;
+        min-height: 2.75rem;
+        padding: var(--space-2) var(--space-4);
+        border: 2px solid var(--color-primary);
+        border-radius: var(--radius);
+        background: var(--color-primary);
+        color: var(--color-background);
+        cursor: pointer;
+      }
+
+      .button--secondary {
+        background: var(--color-background);
+        color: var(--color-primary);
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+        margin-top: var(--space-5);
+      }
+
+      /* Step indicator */
+      .steps {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-4);
+        padding: 0;
+        margin: 0 0 var(--space-4);
+        font-size: var(--font-size-small);
+        color: var(--color-text-muted);
+      }
+
+      .steps li[aria-current="step"] {
+        color: var(--color-text);
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 0.4em;
+        text-decoration-color: var(--color-primary);
+      }
+
+      /* Personal link block */
+      .link-box {
+        border-left: var(--border-accent);
+        background: var(--color-surface);
+        padding: var(--space-3) var(--space-4);
+        margin: 0 0 var(--space-4);
+        max-width: var(--content-max-width);
+      }
+
+      .link-box__label {
+        font-weight: 700;
+        margin: 0 0 var(--space-1);
+      }
+
+      .link-box__url {
+        font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        font-size: 1rem;
+        background: var(--color-background);
+        border: 1px solid var(--color-text-muted);
+        border-radius: var(--radius);
+        padding: var(--space-2) var(--space-3);
+        margin: 0 0 var(--space-3);
+        /* A link has no spaces: it must wrap anywhere at 320px. */
+        overflow-wrap: anywhere;
+        word-break: break-all;
+      }
+
+      .link-box__status {
+        margin: var(--space-2) 0 0;
+        min-height: 1.5em;
+        font-weight: 600;
+      }
+
+      .warning {
+        display: flex;
+        gap: var(--space-3);
+        align-items: flex-start;
+        font-weight: 600;
+        margin: var(--space-3) 0 0;
+        max-width: var(--content-max-width);
+      }
+
+      .warning__icon {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: var(--color-text);
+        color: var(--color-background);
+        font-weight: 700;
+      }
+
+      .notice {
+        border-left: var(--border-accent);
+        padding: var(--space-2) var(--space-3);
+        margin: 0 0 var(--space-4);
+        font-weight: 600;
+      }
+
+      /* Form */
+      .field {
+        margin: 0 0 var(--space-4);
+      }
+
+      .field label,
+      .field legend {
+        display: block;
+        font-weight: 700;
+        margin-bottom: var(--space-1);
+        padding: 0;
+      }
+
+      .field fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      .hint {
+        display: block;
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-1);
+      }
+
+      .field input[type="text"],
+      .field input[type="email"],
+      .field input[type="tel"] {
+        font: inherit;
+        width: 100%;
+        max-width: 28rem;
+        min-height: 2.75rem;
+        padding: var(--space-2);
+        border: 2px solid var(--color-text);
+        border-radius: var(--radius);
+      }
+
+      .field--error {
+        border-left: 4px solid var(--color-error);
+        padding-left: var(--space-3);
+      }
+
+      .field--error input[type="text"],
+      .field--error input[type="email"] {
+        border-color: var(--color-error);
+      }
+
+      .field__error {
+        display: block;
+        color: var(--color-error);
+        font-weight: 700;
+        margin-bottom: var(--space-1);
+      }
+
+      .radio {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        min-height: 2.75rem;
+      }
+
+      .radio input {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: 0;
+        accent-color: var(--color-primary);
+      }
+
+      .conditional {
+        border-left: 4px solid var(--color-text-muted);
+        padding-left: var(--space-3);
+        margin: var(--space-2) 0 0 0.6rem;
+      }
+
+      .error-summary {
+        border: 4px solid var(--color-error);
+        padding: var(--space-3) var(--space-4);
+        margin: 0 0 var(--space-4);
+        max-width: var(--content-max-width);
+      }
+
+      .error-summary h2 {
+        margin-bottom: var(--space-2);
+      }
+
+      .error-summary ul {
+        margin: 0;
+        padding-left: var(--space-4);
+      }
+
+      .error-summary a {
+        color: var(--color-error);
+        font-weight: 700;
+      }
+
+      /* Dialog (proposal B) */
+      .dialog {
+        width: min(36rem, calc(100vw - 2 * var(--space-3)));
+        max-height: calc(100vh - 2 * var(--space-3));
+        overflow: auto;
+        border: 0;
+        border-top: var(--border-accent);
+        border-radius: var(--radius);
+        padding: var(--space-4);
+        color: var(--color-text);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+      }
+
+      .dialog::backdrop {
+        background: rgba(27, 42, 47, 0.6);
+      }
+
+      .dialog .button-row {
+        margin-top: var(--space-4);
+      }
+
+      /* ---------- Legend and comparison ---------- */
+      .legend {
+        margin-top: var(--space-5);
+        padding: var(--space-4);
+        background: var(--color-background);
+        border: 1px solid var(--proto-line);
+        border-radius: 8px;
+      }
+
+      .legend h2 {
+        font-size: 1.125rem;
+        margin: 0 0 var(--space-3);
+      }
+
+      .legend h3 {
+        font-size: 0.75rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin: var(--space-4) 0 var(--space-2);
+        padding-bottom: var(--space-1);
+        border-bottom: 1px solid var(--proto-line);
+      }
+
+      .legend__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+        gap: var(--space-2) var(--space-5);
+      }
+
+      .legend dl {
+        margin: 0;
+      }
+
+      .legend dt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        align-items: center;
+        margin-top: var(--space-3);
+      }
+
+      .legend dd {
+        margin: var(--space-1) 0 0;
+        font-size: 0.9375rem;
+      }
+
+      .legend code {
+        font-size: 0.875rem;
+        font-weight: 600;
+        background: var(--proto-paper);
+        border: 1px solid var(--proto-line);
+        padding: 0 0.4em;
+        border-radius: 4px;
+      }
+
+      .legend li {
+        margin-bottom: var(--space-2);
+        font-size: 0.9375rem;
+      }
+
+      .badge {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 100px;
+        white-space: nowrap;
+      }
+
+      .badge--exists {
+        background: var(--proto-exists);
+        color: var(--proto-exists-ink);
+      }
+
+      .badge--new {
+        background: var(--proto-new);
+        color: var(--proto-new-ink);
+      }
+
+      .compare {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 0.9375rem;
+      }
+
+      .compare th,
+      .compare td {
+        overflow-wrap: anywhere;
+        hyphens: auto;
+        text-align: left;
+        vertical-align: top;
+        padding: var(--space-2);
+        border-bottom: 1px solid var(--proto-line);
+      }
+
+      .compare-wrap {
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body
+    x-data="{
+      variant: 'A',
+      screen: 'start',
+      linkMode: 'start',
+      justStarted: false,
+      savedMessage: '',
+      copyMessage: '',
+      submitted: false,
+      errors: {},
+      summary: [],
+      form: { soort: '', organisatie: '', naam: '', email: '', telefoon: '' },
+      data: null,
+      lastTrigger: null,
+      dialogOpen: false,
+
+      loadError: false,
+
+      async init() {
+        this.$watch('variant', () => this.restart());
+        this.$watch('screen', () => this.updateTitle());
+        this.$watch('summary', () => this.updateTitle());
+        try {
+          const response = await fetch('./data/persoonlijke-link.json');
+          this.data = await response.json();
+        } catch (error) {
+          this.loadError = true;
+        }
+      },
+
+      variantText() {
+        return this.variant === 'A'
+          ? 'A: na Start melding en na Opslaan en later verdergaan opent een eigen pagina met de link.'
+          : 'B: na Start melding staat de link in een kader op stap 1; Opslaan en later verdergaan opent een dialoog.';
+      },
+
+      jumpToStart() {
+        this.restart();
+        this.startReport();
+      },
+
+      jumpToLater() {
+        this.restart();
+        this.fillExample();
+        this.screen = 'stap1';
+        this.saveStep('later', document.getElementById('later-button'));
+      },
+
+      get link() {
+        return this.data ? this.data.linkBase + this.data.token : '';
+      },
+
+      pageName() {
+        const names = {
+          start: 'Een evenement melden',
+          link: 'Bewaar uw persoonlijke link',
+          stap1: 'Stap 1 van 2: Organisator',
+          stap2: 'Stap 2 van 2: Evenement',
+        };
+        return names[this.screen];
+      },
+
+      updateTitle() {
+        const prefix = this.screen === 'stap1' && this.summary.length > 0 ? 'Fout: ' : '';
+        document.title = prefix + this.pageName() + ' - Evenementenloket Kranswijk (prototype)';
+      },
+
+      go(screen) {
+        this.copyMessage = '';
+        this.screen = screen;
+        this.focusLater('heading-' + screen);
+      },
+
+      // x-show applies display in its own effect; focus only after the element is visible.
+      focusLater(id) {
+        setTimeout(() => {
+          const element = document.getElementById(id);
+          if (element) element.focus();
+        }, 0);
+      },
+
+      restart() {
+        this.closeDialog(false);
+        this.lastTrigger = null;
+        this.form = { soort: '', organisatie: '', naam: '', email: '', telefoon: '' };
+        this.errors = {};
+        this.summary = [];
+        this.submitted = false;
+        this.savedMessage = '';
+        this.justStarted = false;
+        this.go('start');
+      },
+
+      fillExample() {
+        if (this.data) Object.assign(this.form, this.data.voorbeeld);
+        if (this.submitted) this.validate();
+      },
+
+      startReport() {
+        this.savedMessage = '';
+        if (this.variant === 'A') {
+          this.linkMode = 'start';
+          this.go('link');
+        } else {
+          this.justStarted = true;
+          this.go('stap1');
+        }
+      },
+
+      validate() {
+        const errors = {};
+        if (!this.form.soort) {
+          errors.soort = 'Kies of u meldt als particulier of namens een organisatie';
+        }
+        if (this.form.soort === 'organisatie' && !this.form.organisatie.trim()) {
+          errors.organisatie = 'Vul de naam van de organisatie in';
+        }
+        if (!this.form.naam.trim()) {
+          errors.naam = 'Vul de naam van de contactpersoon in';
+        }
+        if (!this.form.email.trim()) {
+          errors.email = 'Vul een e-mailadres in';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email.trim())) {
+          errors.email = 'Vul een geldig e-mailadres in, zoals naam@example.org';
+        }
+        this.errors = errors;
+        return errors;
+      },
+
+      revalidate() {
+        if (this.submitted) this.validate();
+      },
+
+      fieldTarget(key) {
+        return key === 'soort' ? 'soort-particulier' : key;
+      },
+
+      save(event) {
+        this.saveStep(event.submitter ? event.submitter.value : 'verder', event.submitter);
+      },
+
+      saveStep(action, trigger) {
+        this.submitted = true;
+        const errors = this.validate();
+        const order = ['soort', 'organisatie', 'naam', 'email'];
+        this.summary = order.filter((key) => errors[key]).map((key) => ({ key, text: errors[key] }));
+        if (this.summary.length > 0) {
+          this.savedMessage = '';
+          this.focusLater('error-summary');
+          return;
+        }
+        this.submitted = false;
+        this.justStarted = false;
+        if (action === 'later') {
+          this.savedMessage = 'Stap 1 is opgeslagen.';
+          if (this.variant === 'A') {
+            this.linkMode = 'later';
+            this.go('link');
+          } else {
+            this.lastTrigger = trigger;
+            this.openDialog();
+          }
+        } else {
+          this.savedMessage = 'Stap 1 is opgeslagen.';
+          this.go('stap2');
+        }
+      },
+
+      focusField(key) {
+        const element = document.getElementById(this.fieldTarget(key));
+        if (element) element.focus();
+      },
+
+      async copyLink() {
+        try {
+          await navigator.clipboard.writeText(this.link);
+          this.copyMessage = 'De link is gekopieerd.';
+        } catch (error) {
+          this.copyMessage = 'Kopiëren lukte niet. Selecteer de link en kopieer hem zelf.';
+        }
+      },
+
+      openDialog() {
+        this.copyMessage = '';
+        this.$refs.dialog.showModal();
+        this.dialogOpen = true;
+        this.focusLater('dialog-title');
+      },
+
+      closeDialog(returnFocus = true) {
+        const dialog = this.$refs.dialog;
+        if (dialog && dialog.open) dialog.close();
+        if (returnFocus && this.lastTrigger) this.lastTrigger.focus();
+      },
+    }"
+  >
+    <div class="proto">
+      <aside aria-label="Uitleg en bediening van het prototype">
+        <p class="proto__eyebrow">Interactief prototype · add-draft-application</p>
+        <p class="proto__title">De persoonlijke link tonen: voorstel A of B</p>
+        <p class="proto__gloss">
+          Klik door het begin van een melding en kies welk voorstel het beste werkt. De startpagina
+          is in A en B gelijk; het verschil zit in wat er gebeurt na <strong>Start melding</strong>
+          en na <strong>Opslaan en later verdergaan</strong>. Met "Ga direct naar" spring je naar
+          die momenten. Gebruik ook alleen het toetsenbord.
+          <a href="./index.html">Terug naar het overzicht</a>
+        </p>
+        <p class="proto__gloss">
+          Scherm: <code>StartPage</code> (bestaat) en nieuwe schermen voor de link en stap 1
+          (nog geen component).
+        </p>
+
+        <p class="proto__error" role="alert" x-show="loadError" x-cloak>
+          De voorbeeldgegevens konden niet laden, dus de link blijft leeg. Open dit bestand via een
+          webserver: <code>npx http-server docs/prototypes</code>.
+        </p>
+
+        <div class="proto__controls">
+          <fieldset>
+            <legend>Voorstel</legend>
+            <div class="proto__switch">
+              <label
+                ><input type="radio" name="variant" value="A" x-model="variant" /> A: eigen
+                linkpagina</label
+              >
+              <label
+                ><input type="radio" name="variant" value="B" x-model="variant" /> B: kader +
+                dialoog</label
+              >
+            </div>
+            <p class="proto__variant-text" x-text="variantText()"></p>
+          </fieldset>
+          <div class="proto__actions" role="group" aria-labelledby="jump-label">
+            <span id="jump-label" class="proto__jump-label">Ga direct naar:</span>
+            <button type="button" class="proto__button" @click="jumpToStart()">
+              Na Start melding
+            </button>
+            <button type="button" class="proto__button" @click="jumpToLater()">
+              Na Opslaan en later verdergaan
+            </button>
+          </div>
+          <div class="proto__actions">
+            <button type="button" class="proto__button" @click="fillExample()">
+              Vul voorbeeldgegevens in
+            </button>
+            <button type="button" class="proto__button" @click="restart()">Opnieuw beginnen</button>
+          </div>
+        </div>
+      </aside>
+
+      <p class="proto__frame-label" aria-hidden="true">
+        Zo ziet de aanvrager het (voorstel <span x-text="variant"></span>)
+      </p>
+      <div class="proto__frame">
+        <div class="app">
+          <a class="skip-link" href="#main" @click.prevent="document.getElementById('main').focus()"
+            >Naar de inhoud</a
+          >
+          <header class="app__header">
+            <a
+              class="app__home-link"
+              href="#"
+              :aria-current="screen === 'start' ? 'page' : null"
+              @click.prevent="restart()"
+            >
+              <span class="app__service">Evenementenloket </span>
+              <span class="app__municipality">Gemeente Kranswijk</span>
+              <span class="visually-hidden">, naar de startpagina</span>
+            </a>
+          </header>
+
+          <main id="main" class="app__main" tabindex="-1">
+            <!-- Start page -->
+            <section x-show="screen === 'start'">
+              <h1 id="heading-start" tabindex="-1">Een evenement melden</h1>
+              <p>
+                Organiseert u een klein evenement in Kranswijk? Bijvoorbeeld een buurtfeest, markt of
+                sportdag. Dat meldt u hier bij de gemeente. Het invullen duurt ongeveer 10 minuten.
+              </p>
+              <p>U heeft nodig:</p>
+              <ul>
+                <li>uw naam en e-mailadres, en eventueel de naam van uw organisatie;</li>
+                <li>de naam, plaats, datum en tijd van het evenement.</li>
+              </ul>
+              <p>U hoeft niet in te loggen. U krijgt een persoonlijke link waarmee u later verder kunt.</p>
+              <button type="button" class="button" @click="startReport()">Start melding</button>
+            </section>
+
+            <!-- Proposal A: link page -->
+            <section x-show="screen === 'link'" x-cloak>
+              <p class="notice" role="status" x-text="linkMode === 'later' ? savedMessage : ''"
+                 x-show="linkMode === 'later' && savedMessage"></p>
+              <h1 id="heading-link" tabindex="-1">Bewaar uw persoonlijke link</h1>
+              <p x-show="linkMode === 'start'">
+                Uw concept is aangemaakt. Met deze link opent u uw melding later weer. De link werkt
+                als een sleutel: iedereen met de link kan uw melding bekijken en verder invullen.
+              </p>
+              <p x-show="linkMode === 'later'">
+                Met deze link gaat u later verder waar u bent gebleven. U kunt dit venster daarna
+                sluiten.
+              </p>
+              <div class="link-box">
+                <p class="link-box__label" id="link-label-a">Uw persoonlijke link</p>
+                <p class="link-box__url" aria-labelledby="link-label-a" x-text="link"></p>
+                <button type="button" class="button button--secondary" @click="copyLink()">
+                  Kopieer link
+                </button>
+                <p class="link-box__status" role="status" x-text="screen === 'link' ? copyMessage : ''"></p>
+              </div>
+              <p>U kunt ook een bladwijzer maken: het adres in de adresbalk is uw link.</p>
+              <p class="warning">
+                <span class="warning__icon" aria-hidden="true">!</span>
+                <span
+                  >Let op: de gemeente kan een kwijtgeraakte link niet opnieuw sturen. Zonder link
+                  kunt u niet verder met uw melding.</span
+                >
+              </p>
+              <div class="button-row">
+                <button type="button" class="button" @click="go('stap1')"
+                  x-text="linkMode === 'start' ? 'Verder naar stap 1' : 'Verder met invullen'"></button>
+              </div>
+            </section>
+
+            <!-- Step 1 -->
+            <section x-show="screen === 'stap1'" x-cloak>
+              <nav aria-label="Stappen">
+                <ol class="steps">
+                  <li aria-current="step">1. Organisator</li>
+                  <li>2. Evenement</li>
+                  <li>3. Controleren</li>
+                </ol>
+              </nav>
+
+              <div
+                class="error-summary"
+                id="error-summary"
+                tabindex="-1"
+                aria-labelledby="error-summary-title"
+                x-show="summary.length > 0"
+              >
+                <h2 id="error-summary-title">Er is een probleem</h2>
+                <ul>
+                  <template x-for="item in summary" :key="item.key">
+                    <li>
+                      <a :href="'#' + fieldTarget(item.key)" @click.prevent="focusField(item.key)"
+                        x-text="item.text"></a>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+
+              <h1 id="heading-stap1" tabindex="-1">
+                <span class="caption">Stap 1 van 2<span class="visually-hidden">: </span></span>Organisator
+              </h1>
+
+              <!-- Proposal B: link block on the first visit -->
+              <section class="link-box" aria-labelledby="link-notice-title"
+                x-show="variant === 'B' && justStarted">
+                <h2 id="link-notice-title">Bewaar uw persoonlijke link</h2>
+                <p>Met deze link opent u uw melding later weer. Iedereen met de link kan uw melding bekijken en verder invullen.</p>
+                <p class="link-box__url" x-text="link"></p>
+                <button type="button" class="button button--secondary" @click="copyLink()">
+                  Kopieer link
+                </button>
+                <p class="link-box__status" role="status"
+                  x-text="screen === 'stap1' && !dialogOpen ? copyMessage : ''"></p>
+                <p class="warning">
+                  <span class="warning__icon" aria-hidden="true">!</span>
+                  <span>De gemeente kan een kwijtgeraakte link niet opnieuw sturen.</span>
+                </p>
+              </section>
+
+              <form novalidate @submit.prevent="save($event)">
+                <div class="field" :class="errors.soort && 'field--error'">
+                  <fieldset :aria-describedby="errors.soort ? 'soort-error' : null">
+                    <legend>Meldt u als particulier of namens een organisatie?</legend>
+                    <span class="field__error" id="soort-error" x-show="errors.soort">
+                      <span class="visually-hidden">Fout: </span><span x-text="errors.soort"></span>
+                    </span>
+                    <div class="radio">
+                      <input type="radio" id="soort-particulier" name="soort" value="particulier"
+                        x-model="form.soort" @change="revalidate()" />
+                      <label for="soort-particulier">Particulier</label>
+                    </div>
+                    <div class="radio">
+                      <input type="radio" id="soort-organisatie" name="soort" value="organisatie"
+                        x-model="form.soort" @change="revalidate()"
+                        aria-controls="conditional-organisatie" />
+                      <label for="soort-organisatie">Namens een organisatie</label>
+                    </div>
+                    <div class="conditional" id="conditional-organisatie"
+                      x-show="form.soort === 'organisatie'">
+                      <div class="field" :class="errors.organisatie && 'field--error'">
+                        <label for="organisatie">Naam van de organisatie</label>
+                        <span class="field__error" id="organisatie-error" x-show="errors.organisatie">
+                          <span class="visually-hidden">Fout: </span><span x-text="errors.organisatie"></span>
+                        </span>
+                        <input type="text" id="organisatie" autocomplete="organization"
+                          x-model="form.organisatie" @blur="revalidate()"
+                          :aria-invalid="errors.organisatie ? 'true' : null"
+                          :aria-describedby="errors.organisatie ? 'organisatie-error' : null" />
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+
+                <div class="field" :class="errors.naam && 'field--error'">
+                  <label for="naam">Naam contactpersoon</label>
+                  <span class="hint" id="naam-hint">De persoon die de gemeente kan benaderen over het evenement.</span>
+                  <span class="field__error" id="naam-error" x-show="errors.naam">
+                    <span class="visually-hidden">Fout: </span><span x-text="errors.naam"></span>
+                  </span>
+                  <input type="text" id="naam" autocomplete="name" x-model="form.naam"
+                    @blur="revalidate()" :aria-invalid="errors.naam ? 'true' : null"
+                    :aria-describedby="errors.naam ? 'naam-hint naam-error' : 'naam-hint'" />
+                </div>
+
+                <div class="field" :class="errors.email && 'field--error'">
+                  <label for="email">E-mailadres</label>
+                  <span class="field__error" id="email-error" x-show="errors.email">
+                    <span class="visually-hidden">Fout: </span><span x-text="errors.email"></span>
+                  </span>
+                  <input type="email" id="email" autocomplete="email" spellcheck="false"
+                    x-model="form.email" @blur="revalidate()"
+                    :aria-invalid="errors.email ? 'true' : null"
+                    :aria-describedby="errors.email ? 'email-error' : null" />
+                </div>
+
+                <div class="field">
+                  <label for="telefoon">Telefoonnummer (niet verplicht)</label>
+                  <input type="tel" id="telefoon" autocomplete="tel" x-model="form.telefoon" />
+                </div>
+
+                <div class="button-row">
+                  <button type="submit" class="button" value="verder">Opslaan en verder</button>
+                  <button type="submit" class="button button--secondary" value="later" id="later-button">
+                    Opslaan en later verdergaan
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <!-- Step 2: stub -->
+            <section x-show="screen === 'stap2'" x-cloak>
+              <p class="notice" role="status" x-text="screen === 'stap2' ? savedMessage : ''"></p>
+              <nav aria-label="Stappen">
+                <ol class="steps">
+                  <li>1. Organisator</li>
+                  <li aria-current="step">2. Evenement</li>
+                  <li>3. Controleren</li>
+                </ol>
+              </nav>
+              <h1 id="heading-stap2" tabindex="-1">
+                <span class="caption">Stap 2 van 2<span class="visually-hidden">: </span></span>Evenement
+              </h1>
+              <p>Deze stap is niet uitgewerkt in dit prototype. Hij gaat over de vragen naar het evenement.</p>
+              <div class="button-row">
+                <button type="button" class="button button--secondary" @click="go('stap1')">
+                  Terug naar stap 1
+                </button>
+              </div>
+            </section>
+          </main>
+
+          <footer class="app__footer">
+            <p>
+              Gemeente Kranswijk bestaat niet. Dit is een portfolioproject. Vul geen echte gegevens in.
+            </p>
+          </footer>
+
+          <!-- Proposal B: dialog after "Opslaan en later verdergaan" -->
+          <dialog class="dialog" x-ref="dialog" aria-labelledby="dialog-title"
+            @close="dialogOpen = false; copyMessage = ''; lastTrigger && lastTrigger.focus()">
+            <h2 id="dialog-title" tabindex="-1">Uw concept is opgeslagen</h2>
+            <p>Met deze link gaat u later verder waar u bent gebleven.</p>
+            <div class="link-box">
+              <p class="link-box__label" id="link-label-b">Uw persoonlijke link</p>
+              <p class="link-box__url" aria-labelledby="link-label-b" x-text="link"></p>
+              <button type="button" class="button button--secondary" @click="copyLink()">
+                Kopieer link
+              </button>
+              <p class="link-box__status" role="status" x-text="dialogOpen ? copyMessage : ''"></p>
+            </div>
+            <p class="warning">
+              <span class="warning__icon" aria-hidden="true">!</span>
+              <span>De gemeente kan een kwijtgeraakte link niet opnieuw sturen.</span>
+            </p>
+            <div class="button-row">
+              <button type="button" class="button" @click="closeDialog()">Verder met invullen</button>
+            </div>
+          </dialog>
+        </div>
+      </div>
+
+      <aside class="legend" aria-label="Legenda en vergelijking">
+        <h2>Legenda en vergelijking</h2>
+
+        <h3>Dit kun je zelf proberen</h3>
+        <ol>
+          <li>
+            Kies <strong>Start melding</strong> in A en in B. Waar valt de waarschuwing over de link
+            het meest op? Wat hoort een schermlezer eerst?
+          </li>
+          <li>
+            Laat stap 1 leeg en kies <strong>Opslaan en later verdergaan</strong>. In beide voorstellen
+            verschijnt de foutsamenvatting en wordt er niets opgeslagen.
+          </li>
+          <li>
+            Vul de voorbeeldgegevens in en kies opnieuw <strong>Opslaan en later verdergaan</strong>.
+            A opent een pagina, B een dialoog.
+          </li>
+          <li>
+            In B, alleen met het toetsenbord: kom je met Tab achter de dialoog? Sluit hem met Escape.
+            Waar staat de focus daarna?
+          </li>
+          <li>Kies <strong>Kopieer link</strong>: de bevestiging verschijnt en wordt voorgelezen.</li>
+          <li>Maak het venster 320 pixels breed: de lange link moet afbreken, zonder horizontaal scrollen.</li>
+        </ol>
+
+        <h3>Afweging</h3>
+        <div class="compare-wrap">
+          <table class="compare">
+            <caption class="visually-hidden">Voorstel A en B vergeleken</caption>
+            <thead>
+              <tr>
+                <th scope="col">Punt</th>
+                <th scope="col">A: eigen linkpagina</th>
+                <th scope="col">B: kader + dialoog</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Valt de waarschuwing op?</th>
+                <td>Ja, het is het enige op de pagina.</td>
+                <td>Het kader staat naast het formulier en concurreert ermee.</td>
+              </tr>
+              <tr>
+                <th scope="row">Toegankelijkheid</th>
+                <td>Gewone pagina: kop, titel, focus naar de kop. Hetzelfde patroon als elke stap.</td>
+                <td>De dialoog moet de focus vasthouden, met Escape sluiten en de focus teruggeven. Dat zijn extra scenario's om te testen.</td>
+              </tr>
+              <tr>
+                <th scope="row">Klikken</th>
+                <td>Eén klik extra bij de start.</td>
+                <td>Direct naar stap 1.</td>
+              </tr>
+              <tr>
+                <th scope="row">Code (schatting)</th>
+                <td>Eén pagina, twee ingangen.</td>
+                <td>Kader plus dialoogcomponent.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="legend__grid">
+          <div>
+            <h3>Onderdelen</h3>
+            <dl>
+              <dt><code>PageShell</code> <span class="badge badge--exists">bestaat al</span></dt>
+              <dd>Kop, hoofdinhoud en voettekst, zoals op de startpagina. Nagebouwd in HTML.</dd>
+              <dt><code>SkipLink</code> <span class="badge badge--exists">bestaat al</span></dt>
+              <dd>"Naar de inhoud", eerste Tab-stop.</dd>
+              <dt><code>StartPage</code> <span class="badge badge--exists">bestaat al</span></dt>
+              <dd>Uitgebreid met wat u nodig heeft en de knop Start melding.</dd>
+              <dt>Linkpagina (A) <span class="badge badge--new">voorstel</span></dt>
+              <dd>Pagina met de link, een kopieerknop en de waarschuwing. Twee ingangen: na de start en na "later verdergaan".</dd>
+              <dt>Linkkader (B) <span class="badge badge--new">voorstel</span></dt>
+              <dd>Kader onder de kop van stap 1, alleen bij het eerste bezoek na de start.</dd>
+              <dt>Linkdialoog (B) <span class="badge badge--new">voorstel</span></dt>
+              <dd>Native <code>dialog</code> met <code>showModal()</code>: de pagina erachter is niet te bedienen, Escape sluit.</dd>
+              <dt>Stappenindicator <span class="badge badge--new">voorstel</span></dt>
+              <dd>Lijst met <code>aria-current="step"</code>; de stappen zijn geen links.</dd>
+              <dt>Foutsamenvatting <span class="badge badge--new">voorstel</span></dt>
+              <dd>"Er is een probleem", krijgt de focus, links naar elk veld. Paginatitel begint met "Fout:".</dd>
+              <dt>Formulierveld <span class="badge badge--new">voorstel</span></dt>
+              <dd>Label, hint en fout gekoppeld met <code>aria-describedby</code>; <code>aria-invalid</code> bij een fout.</dd>
+              <dt><code>--color-error</code> <span class="badge badge--new">voorstel</span></dt>
+              <dd>Nieuwe kleur voor fouten (#b3261e, 6,5:1 op wit). Staat nog niet in <code>tokens.css</code>.</dd>
+            </dl>
+          </div>
+          <div>
+            <h3>Interacties</h3>
+            <ul>
+              <li><strong>Start melding</strong>: A gaat naar de linkpagina, B naar stap 1 met het linkkader.</li>
+              <li>Bij elke schermwissel gaat de focus naar de kop (<code>h1</code>) en verandert de paginatitel.</li>
+              <li><strong>Opslaan en verder</strong> met fouten: foutsamenvatting, niets opgeslagen. Zonder fouten: stap 2 met de melding "Stap 1 is opgeslagen".</li>
+              <li><strong>Opslaan en later verdergaan</strong>: controleert en slaat op zoals "Opslaan en verder". Daarna A: linkpagina; B: dialoog.</li>
+              <li>Na de eerste poging controleert elk veld zichzelf opnieuw als u het verlaat. Tijdens het typen niet.</li>
+              <li>Een link in de foutsamenvatting zet de focus op het veld.</li>
+              <li><strong>Kopieer link</strong>: kopieert naar het klembord en meldt dat in een live region.</li>
+              <li>B: de dialoog sluit met <strong>Verder met invullen</strong> of Escape; de focus gaat terug naar de knop die hem opende.</li>
+              <li>De naam van de startpagina in de kop begint het prototype opnieuw.</li>
+            </ul>
+
+            <h3>Afwijkingen</h3>
+            <ul>
+              <li>Echte controle van de velden in plaats van een schakelaar "stap bevat fouten".</li>
+              <li>Stap 2 en de controlepagina zijn niet uitgewerkt.</li>
+            </ul>
+
+            <h3>Wat dit prototype niet doet</h3>
+            <ul>
+              <li>Geen server: er wordt niets opgeslagen en de link opent niets.</li>
+              <li>De link en de token zijn voorbeelden.</li>
+              <li>Geen definitieve teksten: die komen in <code>nl.json</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>
