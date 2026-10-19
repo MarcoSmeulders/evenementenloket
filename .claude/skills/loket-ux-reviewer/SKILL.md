@@ -29,5 +29,7 @@ usability together, run real a11y tooling only if it is already installed (and
 never present a clean scan as proof of accessibility), then write
 `docs/ux-reviews/ux-review_[target]_[YYYY-MM-DD].md` with prioritised findings
 (severity · effort · confidence, each mapped to a WCAG criterion and the person
-affected), a "Verdieping" deep-dive, and a "Groei als UX Engineer" section. Offer a
+affected). The full report, with the "Verdieping" deep-dive and the "Groei als UX
+Engineer" section, goes to the git-ignored `docs/ux-reviews/prive/`. The committed copy
+in `docs/ux-reviews/` is the same report without those two sections. Offer a
 CSV/JSON tracker on request. It must not modify the reviewed code, design, or app.

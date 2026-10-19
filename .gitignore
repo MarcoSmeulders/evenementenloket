@@ -12,6 +12,9 @@ test-results/
 storybook-static/
 *.tsbuildinfo
 
+# Full UX reviews with the learning part (coaching for the developer, not for the portfolio)
+docs/ux-reviews/prive/
+
 # Environment files: only the example is committed
 .env
 .env.*

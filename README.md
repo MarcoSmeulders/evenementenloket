@@ -96,6 +96,7 @@ openspec/        Specs en wijzigingen
 
 ## Documentatie
 
+- [Werkwijze](docs/werkwijze.md): begin hier
 - [Roadmap](docs/roadmap.md)
 - [Beslissingen (ADR's)](docs/adr/)
 - [Handleiding voor aanvragers](docs/handleiding/aanvrager.md) (concept)
@@ -107,8 +108,9 @@ openspec/        Specs en wijzigingen
 ## Werkwijze
 
 Elke wijziging begint als voorstel in OpenSpec, met eisen en scenario's. Pas na review
-wordt het gebouwd. Ik werk met Claude Code als assistent, met eigen skills en een eigen
-reviewagent. De afspraken staan in [`CLAUDE.md`](CLAUDE.md), de eigen skills en de agent in
+wordt het gebouwd. Hoe dat in de praktijk gaat, van prototype tot test, zie je in de
+[werkwijze](docs/werkwijze.md) aan de hand van één onderdeel. Ik werk met Claude Code als
+assistent, met eigen skills en een eigen reviewagent. De afspraken staan in [`CLAUDE.md`](CLAUDE.md), de eigen skills en de agent in
 [`.claude/`](.claude/). Ik review en commit alles zelf.
 
 **Branches.** Ik werk op `develop`. Op `main` staat de vrijgegeven versie. Die verandert

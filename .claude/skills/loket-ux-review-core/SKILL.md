@@ -132,7 +132,16 @@ verifiable it was given the input type.
 
 ## The learning layer (the point of this skill)
 
-The report is also a teaching instrument. Build all three layers, every time:
+The review is also a teaching instrument. Build all three layers, every time. The repository
+is public and the report is part of a portfolio, so every review is written twice, with the
+same file name:
+
+- **The full report** in `docs/ux-reviews/prive/` (git-ignored) holds everything from
+  `assets/report-template.md`, including "Verdieping" and "Groei als UX Engineer". It is
+  for the developer. Never link to it from a committed file.
+- **The public report** in `docs/ux-reviews/` (committed) is the same report without
+  "Verdieping" and "Groei als UX Engineer". The lessons are for the developer only: leave
+  no summary, mention or trace of them in the public report.
 
 1. **Per finding — "Waarom dit telt".** One or two sentences linking the issue to the
    underlying principle, the WCAG criterion, and the real person affected. Not "add alt
@@ -159,8 +168,9 @@ the value is in explaining why *their* code or design does what it does.
 - **Format:** Markdown with YAML front-matter (default). Offer a CSV findings tracker, and
   a JSON variant with a `lastUpdated` field when the user wants machine-readable output.
 - **File naming:** `ux-review_[target]_[YYYY-MM-DD].md` (e.g.
-  `ux-review_startpagina_2026-10-02.md`). The findings tracker mirrors the name
-  with a `.csv` extension.
+  `ux-review_startpagina_2026-10-02.md`), the same in `docs/ux-reviews/` and in
+  `docs/ux-reviews/prive/`. The findings tracker mirrors the name with a `.csv`
+  extension.
 - **Tone:** direct and specific. Critique the artefact, never the author. Praise what is
   genuinely good — a review that only lists problems trains the reader to see only
   problems, and misses the chance to reinforce sound patterns.

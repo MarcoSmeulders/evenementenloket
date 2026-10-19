@@ -5,7 +5,8 @@
 # The UX reviewer produces an artefact (its report) and, in the memory variant,
 # curates its own notebook. Enabling those means Write is available — this guard
 # keeps that power scoped. It ALLOWS writes only to:
-#   1. the review report / tracker:  docs/ux-reviews/*.{md,csv,json};
+#   1. the review report / tracker:  docs/ux-reviews/*.{md,csv,json}, and the full
+#      private report in docs/ux-reviews/prive/ (git-ignored);
 #   2. the reviewer's memory dir:     …/agent-memory[-local]/loket-ux-reviewer/…
 # and BLOCKS (exit 2) writes to source code, config, or anywhere else. The reviewer
 # stays read-only for the artefact it audits — it advises; it never applies the fix.
@@ -29,7 +30,7 @@ extract_path() {
 P="$(extract_path)"
 
 block() {
-  echo "Blocked by ux write guard: $1 The ux-reviewer may only write its review report (docs/ux-reviews/*.md / .csv / .json) and its own memory directory. It must not modify the reviewed code or design — describe the fix instead." >&2
+  echo "Blocked by ux write guard: $1 The ux-reviewer may only write its review report (docs/ux-reviews/*.md / .csv / .json, also under prive/) and its own memory directory. It must not modify the reviewed code or design — describe the fix instead." >&2
   exit 2
 }
 
@@ -37,7 +38,7 @@ block() {
 [ -z "$P" ] && block "could not determine the target path."
 
 # 1. Review report / tracker inside the project's docs/ux-reviews/ folder.
-printf '%s' "$P" | grep -Eq '(^|/)docs/ux-reviews/[^/]+\.(md|csv|json)$' && exit 0
+printf '%s' "$P" | grep -Eq '(^|/)docs/ux-reviews/(prive/)?[^/]+\.(md|csv|json)$' && exit 0
 
 # 2. The reviewer's memory directory (user, project, or local scope).
 printf '%s' "$P" | grep -Eq 'agent-memory(-local)?/loket-ux-reviewer/' && exit 0

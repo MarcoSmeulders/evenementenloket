@@ -12,7 +12,9 @@ context: |
     automated are marked "- **Verification:** manual" (docs/adr/0001).
   - Accessibility requirements are part of each change's specs, not added afterwards.
   - Dutch only in the UI; no interface text in code, all text in nl.json.
-  - No Redux, no functional-programming libraries. New runtime dependencies need a reason.
+  - Functional style, no point-free code (docs/adr/0013).
+  - A runtime dependency only when it adds value; the design gives the reason and an
+    alternative (docs/adr/0014). Redux and FP libraries are not needed now.
   - Size budget: about 3,000 lines of non-test TypeScript.
   - Public repository: no secrets, real personal data or infrastructure details.
   - OpenSpec artifacts in English; ADRs and other docs in Dutch. Write simply.

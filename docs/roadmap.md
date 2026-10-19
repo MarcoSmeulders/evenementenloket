@@ -13,6 +13,9 @@ De volgorde ligt vast. De inhoud per change is een startpunt: de details komen i
 voorstel van die change. Wijkt een voorstel af van deze roadmap, dan passen we de roadmap
 aan.
 
+Heeft een change een voorstel, dan staat hieronder alleen nog het doel en een link. De
+details staan dan op één plek: in het voorstel.
+
 ## Overzicht
 
 | #   | Change                     | Wat je daarna kunt                                                                                       | Status            |
@@ -35,33 +38,9 @@ zijn geschreven vóór de bouw. Elke change die een scherm verandert, werkt ze b
 
 **Doel:** een organisator start een melding, vult de twee stappen in en kan later verder.
 
-Het voorstel staat in
+Het voorstel, het ontwerp en de scenario's staan in
 [`openspec/changes/add-draft-application/`](../openspec/changes/add-draft-application/).
-De manier waarop de link getoond wordt, is eerst als
-[prototype](prototypes/persoonlijke-link-interactive.html) uitgeprobeerd en
-[gereviewd](ux-reviews/ux-review_prototype-persoonlijke-link-a_2026-10-09.md).
-
-Wat erin zit:
-
-- Startpagina met wat je nodig hebt en de knop **Start melding**. Die maakt een concept aan.
-- **Persoonlijke link.** De link bevat een geheime sleutel van 32 willekeurige bytes. De
-  database bewaart alleen een hash (SHA-256). De sleutel staat in het adres van de webapp,
-  maar gaat als header naar de API, dus niet in de logs van de API. Pagina's sturen geen
-  `Referer` mee en worden niet geïndexeerd.
-- **Linkpagina** na de start en na "Opslaan en later verdergaan", met drie manieren om de
-  link te bewaren: kopiëren, naar jezelf mailen en een bladwijzer. Elk adres met een geldige
-  sleutel opent het concept.
-- Stap 1 **Organisator** en stap 2 **Evenement**, met het datum- en tijdveld van de browser.
-- **Opslaan en verder** slaat alleen een complete stap op. **Opslaan en later verdergaan**
-  slaat ook een deels ingevulde stap op, als het ingevulde formaat klopt.
-- Een foutsamenvatting die de focus krijgt. Fouten veranderen alleen bij verzenden.
-- **Verdergaan via de link:** naar de eerste stap die nog niet af is.
-- Een **controlepagina, alleen lezen**. Wijzigen en indienen komen in change 3.
-- Een link **Vorige stap**, en bij elke paginawissel gaat de focus naar de kop.
-- Opslag in SQLite via `node:sqlite`, met JSON per stap.
-
-Niet in deze change: de links "Wijzig", het indienen en het referentienummer (change 3).
-Een prototype met losse velden voor dag, maand en jaar blijft een idee voor de casuspagina.
+Hoe de persoonlijke link tot stand kwam, staat in de [werkwijze](werkwijze.md).
 
 ## 3. `add-review-and-submit` — controleren en indienen
 
@@ -172,11 +151,8 @@ Past een change niet in het budget, dan stelt het voorstel eerst voor wat eruit 
 
 Elk bij de change waar het speelt:
 
-- ADR-0009: een geheime link in plaats van inloggen voor aanvragers (link kwijt is toegang
-  kwijt). Change 2.
-- ADR-0010: opslag met `node:sqlite`, JSON per stap, en een schema voor een concept en voor
-  een complete stap. Change 2.
-- ADR-0011: TanStack Query en React Hook Form. Change 2.
-- ADR-0012: geen versie zonder JavaScript, en hoe de toegankelijkheid toch goed blijft.
-  Change 2.
 - Een demo-login voor behandelaars; echt inloggen valt buiten het project. Change 4.
+
+De ADR's van change 2 zijn geschreven: [ADR-0009](adr/0009-geheime-link-in-plaats-van-inloggen.md)
+tot en met [ADR-0012](adr/0012-geen-versie-zonder-javascript.md). Zie de
+[lijst met ADR's](adr/README.md).

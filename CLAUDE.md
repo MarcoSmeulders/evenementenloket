@@ -35,9 +35,10 @@ is public and is read by reviewers. See `README.md` for the overview.
 - Tests find elements by role and accessible name, never by CSS class or test ID.
 - Unit tests (`pnpm test`) need no browser, server or network. Browser tests live in
   `e2e/` and run with `pnpm test:e2e` (ADR-0002).
-- No Redux and no functional-programming libraries (Ramda, purify-ts, ts-pattern).
-- Every new runtime dependency needs a short justification in the change's design or an
-  ADR.
+- Functional style, no point-free code; a small home-made monad only under the
+  conditions of ADR-0013.
+- A runtime dependency only when it adds value, with the reason and an alternative in the
+  change's design or an ADR (ADR-0014). Redux and FP libraries are not needed now.
 - API errors use problem details (RFC 9457); field errors are codes, not text.
 - The web app calls the API only through the typed client in `apps/web/src/api/client.ts`.
   API routes stay chained so their types reach `AppType` (ADR-0006).
