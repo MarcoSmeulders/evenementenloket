@@ -94,6 +94,8 @@ docs/            ADR's, handleidingen en rapporten
 openspec/        Specs en wijzigingen
 ```
 
+Hoe `packages/schema` is ingedeeld, staat in [`packages/schema/README.md`](packages/schema/README.md).
+
 ## Documentatie
 
 - [Werkwijze](docs/werkwijze.md): begin hier

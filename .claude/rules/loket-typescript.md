@@ -12,6 +12,11 @@ paths:
 - A function that builds something from nothing starts with `create`: `createI18n()`.
 - A function that builds something from an input starts with `make`: `makeSummary(event)`.
 - Helpers for a module live in one file named after the subject: `eventUtils.ts`.
+- Source files are camelCase. A file with schemas, types or constants is named after its
+  subject, singular: `event.ts`, `fieldError.ts`. The `Utils` suffix is only for files
+  with helper functions and no schemas of their own: `dateTimeUtils.ts`. React components
+  are PascalCase. Kebab-case only for e2e specs (named after the capability) and fixed tool
+  names such as `vite-env.d.ts`.
 
 ## Functions
 

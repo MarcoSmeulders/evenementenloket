@@ -1,15 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { healthResponseSchema, problemDetailSchema } from "./index";
-
-describe("healthResponseSchema", () => {
-  test("accepts status ok", () => {
-    expect(healthResponseSchema.safeParse({ status: "ok" }).success).toBe(true);
-  });
-
-  test("rejects any other status", () => {
-    expect(healthResponseSchema.safeParse({ status: "down" }).success).toBe(false);
-  });
-});
+import { problemDetailSchema } from "./problemDetail";
 
 describe("problemDetailSchema", () => {
   test("accepts a minimal problem detail", () => {
@@ -29,5 +19,19 @@ describe("problemDetailSchema", () => {
   test("rejects a missing title", () => {
     const result = problemDetailSchema.safeParse({ type: "about:blank", status: 500 });
     expect(result.success).toBe(false);
+  });
+
+  test("a problem detail may list field errors as codes", () => {
+    const body = {
+      type: "about:blank",
+      title: "Unprocessable Content",
+      status: 422,
+      errors: [{ field: "email", code: "invalid_email" }],
+    };
+    expect(problemDetailSchema.safeParse(body).success).toBe(true);
+    expect(
+      problemDetailSchema.safeParse({ ...body, errors: [{ field: "email", code: "Ongeldig" }] })
+        .success,
+    ).toBe(false);
   });
 });

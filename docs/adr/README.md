@@ -13,6 +13,7 @@ wat het kost. Zo kun je later zien waarom iets zo is, ook als niemand het meer w
 | [0006](0006-hono-met-getypeerde-client.md) | Hono voor de API, met een getypeerde client |
 | [0007](0007-branches-main-en-develop.md) | Branches main en develop, met een beschermde main |
 | [0008](0008-eigen-update-routine.md) | Eigen update-routine en dependency-audit, geen Dependabot |
+| [0011](0011-tanstack-query-react-hook-form-date-fns.md) | TanStack Query, React Hook Form en date-fns |
 | [0013](0013-functionele-stijl-leesbaar-zonder-point-free.md) | Functionele stijl, leesbaar voor iedereen |
 | [0014](0014-dependency-alleen-met-meerwaarde.md) | Een dependency alleen als hij meerwaarde heeft |
 
