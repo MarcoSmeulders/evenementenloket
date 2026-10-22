@@ -21,7 +21,7 @@ details staan dan op één plek: in het voorstel.
 | #   | Change                     | Wat je daarna kunt                                                                                       | Status            |
 | --- | -------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------- |
 | 1   | `bootstrap-project`        | Basis: paginaframe, API met health check, tests en CI                                                    | klaar (8 okt 2026) |
-| 2   | `add-draft-application`    | Een melding starten, de persoonlijke link krijgen, stap 1 en 2 invullen en opslaan, later verdergaan     | volgende          |
+| 2   | `add-draft-application`    | Een melding starten, de persoonlijke link krijgen, stap 1 en 2 invullen en opslaan, later verdergaan     | gebouwd, in review |
 | 3   | `add-review-and-submit`    | Antwoorden controleren en wijzigen, de melding indienen, een referentienummer en een statuspagina krijgen | gepland           |
 | 4   | `add-handler-workspace`    | Als behandelaar inloggen (demo), meldingen zoeken en openen, de behandeling starten                      | gepland           |
 | 5   | `add-information-request`  | Als behandelaar een vraag stellen, als aanvrager antwoorden                                              | gepland           |
@@ -108,7 +108,8 @@ gegevens.
 - De webserver logt geen paden onder `/aanvraag/`, want daar staat de persoonlijke link in.
 - Een grens aan het aantal concepten dat iemand kan aanmaken.
 
-Open beslissingen: waar de demo draait, en hoe lang een concept bewaard blijft. De
+Open beslissing: waar de demo draait. Hoe lang een concept bewaard blijft, is al geregeld
+in change 2 (30 dagen); de dagelijkse reset van de demo komt daar bovenop. De
 configuratie van de eigen servers komt niet in deze repository.
 
 ## Afwijkingen van het oorspronkelijke plan
@@ -130,22 +131,30 @@ Het plan van 1 oktober 2026 is het startpunt. Dit is sindsdien anders besloten:
 | Een stap met fouten wordt niet opgeslagen   | "Opslaan en later verdergaan" bewaart ook een deels ingevulde stap  | ADR-0010 (change 2)                                                                                       |
 | Velden opnieuw controleren bij het verlaten | Alleen bij verzenden: een verspringende foutregel liet klikken missen | —                                                                                                       |
 | `PATCH /api/my-application`                 | `PUT /api/my-application/steps/:step`, per stap                     | —                                                                                                         |
+| Bewaartermijn van concepten bij de deployment | In change 2: 30 dagen na de laatste keer opslaan | ADR-0010 (change 2) |
 
 ## Grootte
 
-Het budget is ongeveer 3.000 regels TypeScript, zonder tests. Na de bootstrap zijn er
-ongeveer 450 gebruikt. Een grove verdeling als richtlijn, geen eis:
+Het budget is ongeveer 4.000 regels TypeScript, zonder tests. Eerst was het 3.000. Change 2
+kostte ongeveer 2.000 regels in plaats van de geschatte 900. Dat komt vooral door de
+pagina's en formuliercomponenten: Prettier zet in JSX elke prop op een eigen regel. Daarom
+is het budget op 12 oktober 2026 verhoogd.
 
-| Change                    | Schatting |
-| ------------------------- | --------- |
-| `add-draft-application`   | ~900      |
-| `add-review-and-submit`   | ~400      |
-| `add-handler-workspace`   | ~500      |
-| `add-information-request` | ~250      |
-| `add-decision`            | ~200      |
-| `add-demo-deployment`     | ~150      |
+Na change 2 zijn er ongeveer 2.360 regels gebruikt. Een grove verdeling van de rest als
+richtlijn, geen eis:
 
-Past een change niet in het budget, dan stelt het voorstel eerst voor wat eruit gaat.
+| Change                    | Schatting          |
+| ------------------------- | ------------------ |
+| `add-draft-application`   | ~2.000 (was ~900)  |
+| `add-review-and-submit`   | ~400               |
+| `add-handler-workspace`   | ~600 (was ~500)    |
+| `add-information-request` | ~250               |
+| `add-decision`            | ~200               |
+| `add-demo-deployment`     | ~150               |
+
+De latere changes hergebruiken de formuliercomponenten, de foutsamenvatting en de opslag
+uit change 2. Daarom stijgen hun schattingen minder hard. Past een change niet in het
+budget, dan stelt het voorstel eerst voor wat eruit gaat.
 
 ## Nog te schrijven ADR's
 

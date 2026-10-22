@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { createDraft, draftPath, pageTitle } from "./support/draft";
 import { t } from "./support/i18n";
 
 test.beforeEach(async ({ page }) => {
@@ -84,5 +85,24 @@ test.describe("page-shell: Home link", () => {
 
     await expect(homeLink).toHaveAccessibleName(new RegExp(`^${visibleText}`));
     await expect(homeLink).toHaveAttribute("aria-current", "page");
+  });
+});
+
+test.describe("page-shell: Focus on page change", () => {
+  test("focus moves to the heading after a page change", async ({ page }) => {
+    await page.getByRole("button", { name: t("start.button") }).click();
+
+    await expect(page.getByRole("heading", { level: 1, name: t("link.title") })).toBeFocused();
+    await expect(page).toHaveTitle(pageTitle(t("link.title")));
+  });
+
+  test("direct load does not move focus", async ({ page, request }) => {
+    const token = await createDraft(request);
+    await page.goto(draftPath(token, "organisator"));
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
+    await page.keyboard.press("Tab");
+
+    await expect(page.getByRole("link", { name: t("skipLink") })).toBeFocused();
   });
 });

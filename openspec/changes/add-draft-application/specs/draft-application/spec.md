@@ -70,11 +70,16 @@ including the address of the link page, so a bookmark of any page in the flow wo
 ### Requirement: Link page offers ways to keep the link
 The link page SHALL show the personal link with a "Kopieer link" button, a "Mail de link
 naar uzelf" link and a bookmark tip. The warning that a lost link cannot be sent again
-SHALL be part of the block that shows the link, before the bookmark tip.
+SHALL be part of the block that shows the link, before the bookmark tip. The page SHALL
+name how long a draft is kept.
 
 #### Scenario: three ways to keep the link
 - **WHEN** the link page is open
 - **THEN** it shows the personal link, a "Kopieer link" button, a "Mail de link naar uzelf" link whose `mailto:` address contains the personal link, and the warning before the bookmark tip
+
+#### Scenario: link page names the retention period
+- **WHEN** the link page is open
+- **THEN** it says that a draft that is not saved for 30 days is deleted
 
 #### Scenario: copy link confirms every time
 - **WHEN** the applicant chooses "Kopieer link" twice
@@ -92,6 +97,25 @@ SHALL be part of the block that shows the link, before the bookmark tip.
 #### Scenario: link page with large text on a phone
 - **WHEN** the link page is shown at 360 CSS pixels wide with the text size set to 200%
 - **THEN** the page has no horizontal scrollbar and the "Kopieer link" button fits inside the link block
+
+### Requirement: Drafts are kept for 30 days without saving
+A draft that has not been saved for more than 30 days SHALL be deleted. Only saving a step
+SHALL restart the term; opening or reading the draft SHALL NOT. The API SHALL check for such
+drafts when it starts and at least once every 24 hours. The link of a deleted draft SHALL
+behave as an unknown token. Between cleanups, the API SHALL refuse an expired draft as an
+unknown token, so the term is exact.
+
+#### Scenario: draft not saved for more than 30 days is deleted
+- **WHEN** the cleanup runs 30 days and one minute after a draft was last saved
+- **THEN** the draft is deleted, and `GET /api/my-application` with its token responds 404 with the same body as for an unknown token
+
+#### Scenario: draft saved within 30 days is kept
+- **WHEN** a draft was created 40 days ago, saved again 10 days ago, and only opened since
+- **THEN** the cleanup keeps the draft
+
+#### Scenario: expired draft is refused before the cleanup runs
+- **WHEN** a draft was last saved 30 days and one minute ago and the cleanup has not run yet
+- **THEN** `GET /api/my-application` and `PUT /api/my-application/steps/organiser` with its token respond 404, with the same body as for an unknown token
 
 ### Requirement: Organiser step
 Step 1 "Organisator" SHALL ask whether the applicant reports as a private person or for an

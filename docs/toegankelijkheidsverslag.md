@@ -64,3 +64,19 @@ nemen we mee in de volgende change.
   mens. Een korte ronde met de hand in je eigen browser bevestigt het.
 - **Schermlezers** (NVDA met Firefox, VoiceOver met Safari) en hoog-contrastmodus in Windows.
   Die staan als open punt in de UX-review.
+
+## Change `add-draft-application` — melding invullen
+
+**Status:** nog uit te voeren. Deze controles moeten met de hand, met een echte schermlezer.
+Zet per regel de datum, de uitkomst en eventuele bevindingen erbij.
+
+Automatisch al gecontroleerd (Chromium en Firefox): axe op de linkpagina, stap 1 met fouten,
+stap 2, de controlepagina en de pagina voor een ongeldige link; de hele flow met alleen het
+toetsenbord; focus naar de kop bij een paginawissel en naar de foutsamenvatting na een fout.
+
+| Scenario | Hoe testen | NVDA + Firefox | VoiceOver + Safari |
+|---|---|---|---|
+| `Link page offers ways to keep the link` › `screen reader hears the copy confirmation` | Op de linkpagina twee keer **Kopieer link** kiezen. Beide keren moet "De link is gekopieerd." klinken. | nog te doen | nog te doen |
+| `Save a step to continue later` › `screen reader hears that the step was saved` | Stap 1 invullen, **Opslaan en later verdergaan**. Eerst moet "Stap 1 is opgeslagen, kop niveau 1" klinken. | nog te doen | nog te doen |
+| `Character counter` › `screen reader hears the count after a pause` | In de beschrijving typen en stoppen. Het aantal tekens klinkt één keer, niet na elke letter. | nog te doen | nog te doen |
+| `Keyboard and automated checks` › `focus indicator on the form pages` | Met Tab door de linkpagina, stap 1, stap 2 en de controlepagina. Elk element heeft een zichtbare focusring die nergens achter valt. | nog te doen | — |

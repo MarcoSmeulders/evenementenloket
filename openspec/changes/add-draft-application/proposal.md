@@ -42,6 +42,9 @@ The review findings are built into the requirements of this change.
   change, focus moves to the page heading and the page title changes.
 - **Storage.** SQLite through the built-in `node:sqlite` module, behind a repository
   interface. Each step is stored as JSON that has passed the step's Zod schema.
+- **Retention.** A draft that has not been saved for 30 days is deleted. The link page and
+  the applicant guide say so, and a link to a deleted draft shows the invalid link page.
+  Drafts hold personal data, so they are not kept longer than needed.
 - **Docs.** The applicant guide, the accessibility report, the roadmap and new ADRs follow
   the decisions in this change.
 
@@ -50,8 +53,8 @@ The review findings are built into the requirements of this change.
 ### New Capabilities
 
 - `draft-application`: creating a draft, the personal link and access with it, saving
-  each step (partly or completely), resuming, the read-only review page, and how the form
-  reports errors and saved steps to the applicant.
+  each step (partly or completely), resuming, the read-only review page, how long a draft
+  is kept, and how the form reports errors and saved steps to the applicant.
 
 ### Modified Capabilities
 
@@ -66,13 +69,16 @@ The review findings are built into the requirements of this change.
 - **API:** new routes `POST /api/applications`, `GET /api/my-application` and
   `PUT /api/my-application/steps/:step`. Field errors are returned as codes in a problem
   detail (RFC 9457).
-- **New runtime dependencies (web):** `@tanstack/react-query`, `react-hook-form`,
-  `@hookform/resolvers`. Each is justified in `design.md`. The API needs no new runtime
+- **New runtime dependencies:** `@tanstack/react-query`, `react-hook-form` and
+  `@hookform/resolvers` (web); `date-fns` and `@date-fns/tz` (schema package, so used by
+  web and API). Each is justified in `design.md`. Storage and the token need no new
   dependency: `node:sqlite` and `node:crypto` are part of Node 24.
 - **Configuration:** a new optional setting for the database file. Unit and browser tests
   use an in-memory database.
 - **Deviations from the original plan:** `node:sqlite` instead of `better-sqlite3`; the
   reference number moves to `add-review-and-submit`; a partly filled step can be saved;
-  fields are checked again only on submit, not on blur. `docs/roadmap.md` records them.
+  fields are checked again only on submit, not on blur; draft retention (30 days, as the
+  plan proposed) arrives here instead of in `add-demo-deployment`. `docs/roadmap.md`
+  records them.
 - **Size:** about 900 lines of non-test TypeScript, the biggest share of the remaining
   budget.

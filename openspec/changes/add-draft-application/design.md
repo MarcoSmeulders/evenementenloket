@@ -32,8 +32,8 @@ are in `specs/draft-application/spec.md` and `specs/page-shell/spec.md`.
 
 - Submitting, the reference number, status events (`add-review-and-submit`).
 - "Wijzig" links on the review page with a return to the review page (`add-review-and-submit`).
-- Draft retention, rate limiting of draft creation, web server logging and security
-  headers of the hosting (`add-demo-deployment`).
+- Rate limiting of draft creation, the daily reset of the demo, web server logging and
+  security headers of the hosting (`add-demo-deployment`).
 - Optimistic concurrency between two tabs on the same draft: last save wins.
 - A no-JavaScript fallback (recorded in an ADR, see D11).
 
@@ -41,7 +41,8 @@ are in `specs/draft-application/spec.md` and `specs/page-shell/spec.md`.
 
 ### D1. Step schemas: a draft and a complete variant per step
 
-`packages/schema/src/application/` holds per step:
+`packages/schema/src/domain/` holds per step (`organiser.ts`, `event.ts`). The API bodies
+that carry them live in `packages/schema/src/api/`:
 
 - `organiserDraftSchema` / `eventDraftSchema`: every field optional, but each field that is
   present must have a valid format (e-mail shape, max length, real date `YYYY-MM-DD`, time
@@ -52,9 +53,23 @@ are in `specs/draft-application/spec.md` and `specs/page-shell/spec.md`.
   decide whether a step is complete.
 
 Rules that depend on "now" take a clock: the event schema is created by a function
-`eventSchemaAt(now: Date)`, so tests pass a fixed time. "In the future" compares the
-entered local date and time as Europe/Amsterdam time with `now`, using `Intl` to find the
-offset (no date library; `Temporal` is not available by default in Node 24).
+`makeEventSchema(now: Date)`, so tests pass a fixed time.
+
+Date and time handling uses **`date-fns`** with **`@date-fns/tz`**, in one small module
+`packages/schema/src/dateTimeUtils.ts` that the schemas and the web app use:
+
+- a real date: parse `yyyy-MM-dd` strictly and check `isValid` (rejects `2027-02-30`);
+- the instant of an entered date and time: a `TZDate` in `Europe/Amsterdam`, so summer and
+  winter time are handled by the library, not by our own offset code;
+- "start in the future" and "end after start": compare those instants (`isAfter`);
+- display on the review page: `format` with the `nl` locale ("12 juni 2027, 14:00").
+
+*Why a library:* the time-zone conversion around summer and winter time is the part that
+is easy to get wrong by hand. *Alternatives:* `Intl` plus own offset code (no dependency,
+about 20 lines, but the DST edge cases are ours to get right); `Temporal` (the cleanest
+API, but not available by default in Node 24). The developer chose `date-fns`: well known,
+tree-shakeable, and only the functions above end up in the bundle. Check the current API
+of both packages with Context7 during apply.
 
 Dates and times are stored as the strings the native inputs produce (`2027-06-12`,
 `14:00`), meaning local time in Kranswijk. That avoids time-zone conversion in storage and
@@ -89,12 +104,26 @@ applications
   drift.
 - On read, each step is parsed again with its draft schema. Data that no longer fits (after
   a schema change) counts as empty. The demo is reset regularly, so no migrations.
-- `ApplicationRepository` (interface) with `create`, `findByTokenHash`, `saveStep`. One
+- `ApplicationRepository` (interface) with `create`, `findByTokenHash`, `saveStep` and
+  `deleteNotSavedSince`. One
   implementation on `DatabaseSync` from `node:sqlite`. The schema is created with
   `CREATE TABLE IF NOT EXISTS` at startup.
 - New config setting `DATABASE_PATH` (default `data/evenementenloket.sqlite` in
   development, `:memory:` when `NODE_ENV=test`). `data/` is git-ignored. Unit tests build
   the app with an in-memory database, so `pnpm test` needs no file (quality-gates).
+
+- **Retention.** A draft whose `updated_at` is more than 30 days ago is deleted with
+  `deleteNotSavedSince(now - 30 days)`. Only saving a step updates `updated_at`; opening or
+  reading the draft does not, so a link that is only looked at still expires. The API runs
+  the cleanup at startup and then once every 24 hours (`setInterval` with `unref()`, so it
+  never keeps the process alive). Between two cleanups, the token lookup also refuses a
+  draft past the term (`isExpired`), so the 30 days is exact and not up to 24 hours late.
+  The clock is injected, so tests need no waiting. A deleted or expired draft is simply not
+  found, so its link gets the same 404 and invalid link page as
+  an unknown token. The 30 days is one constant in `packages/schema`
+  (`DRAFT_RETENTION_DAYS`), so the link page text uses the same number through i18n
+  interpolation. It is not a config setting: one fixed, documented term is easier to explain
+  than a setting nobody changes.
 
 *Why `node:sqlite` over `better-sqlite3`:* no runtime dependency and no native build (also
 easier in Docker later). The API is synchronous and close to `better-sqlite3`, so switching
@@ -117,9 +146,9 @@ list in change 4 can read fields with `json_extract` or in TypeScript.
   itself, so no constant-time compare is needed.
 - The token never appears in an API path, so the existing log redaction is enough.
 - Web: `apps/web/index.html` gets `<meta name="referrer" content="no-referrer">` for the
-  whole app (simplest, and nothing in the app needs a referrer). The pages under
-  `/aanvraag/` render `<meta name="robots" content="noindex">` with React 19's metadata
-  support.
+  whole app (simplest, and nothing in the app needs a referrer). It already had
+  `<meta name="robots" content="noindex">` for the whole app since the bootstrap, which
+  covers the pages under `/aanvraag/`.
 
 ### D4. API routes
 
@@ -128,7 +157,7 @@ Chained in `buildApp` so they reach `AppType` (ADR-0006):
 | Route | Body | Response |
 |---|---|---|
 | `POST /api/applications` | — | 201 `{ accessToken }` |
-| `GET /api/my-application` | — | 200 `{ status, steps: { organiser: { data, complete }, event: { data, complete } } }` |
+| `GET /api/my-application` | — | 200 `{ status, steps: { organiser: { data, isComplete }, event: { data, isComplete } } }` |
 | `PUT /api/my-application/steps/:step` | `{ intent: "continue" \| "later", data }` | 200 same body as GET, or 422 |
 
 - `:step` is `organiser` or `event` (validated; anything else → 404).
@@ -250,8 +279,9 @@ screen readers do not read every key press.
 ### D11. ADRs and docs written in this change
 
 New ADRs (Dutch): 0009 secret link instead of login (and why a lost link cannot be
-recovered); 0010 storage with `node:sqlite`, JSON per step and draft/complete schemas;
-0011 TanStack Query and React Hook Form; 0012 no version without JavaScript, and how
+recovered); 0010 storage with `node:sqlite`, JSON per step, draft/complete schemas and the 30-day
+retention;
+0011 TanStack Query, React Hook Form and date-fns; 0012 no version without JavaScript, and how
 accessibility is ensured. `docs/handleiding/aanvrager.md`, `docs/toegankelijkheidsverslag.md`,
 `docs/roadmap.md` and `docs/ideeen.md` are updated (see tasks).
 
@@ -275,8 +305,13 @@ F-04). Radio labels fill their 44 px row (review F-12).
   start date that has passed] → Completeness is always derived with the complete schema at
   read time, so the step simply shows as not complete and the summary shows the error on the
   next "Opslaan en verder".
-- [Anyone can create drafts without limit] → Acceptable for a demo that is reset; rate
-  limiting and retention belong to `add-demo-deployment`.
+- [Anyone can create drafts without limit] → Acceptable for a demo; the 30-day cleanup
+  keeps the table from growing forever, and rate limiting belongs to `add-demo-deployment`.
+- [An applicant loses a draft after 30 days without saving] → The link page and the guide
+  name the term, and every save restarts it. Recorded in ADR-0010.
+- [Two new runtime dependencies for dates] → Chosen by the developer; they live only in
+  `packages/schema` and are imported per function. If the bundle grows noticeably, the
+  fallback is `Intl` (see D1).
 - [The token is in the web address] → It stays out of API logs (header), out of `Referer`
   (`no-referrer`) and out of search engines (`noindex`). Web server logs are handled in
   `add-demo-deployment` (roadmap).
@@ -284,7 +319,9 @@ F-04). Radio labels fill their 44 px row (review F-12).
   sits in the link block. Recorded in ADR-0009.
 - [Three new web dependencies and the size budget] → The dependencies replace hand-written
   form and cache code. If the change goes clearly over ~900 lines, stop and propose what to
-  cut (for example the step indicator, which GOV.UK does not require).
+  cut (for example the step indicator, which GOV.UK does not require). Outcome: the change
+  came to ~2,000 lines, mostly pages and form components. The developer chose to keep the
+  behaviour and raise the project budget from ~3,000 to ~4,000 lines (roadmap, "Grootte").
 - [Server-side clock vs browser clock for "start in the future"] → The API is the authority;
   a mismatch shows as a server error code in the summary (scenario "error from the server").
 
