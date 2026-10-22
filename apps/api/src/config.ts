@@ -5,9 +5,19 @@ const configSchema = z.object({
   HOST: z.string().min(1).default("127.0.0.1"),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  DATABASE_PATH: z.string().min(1).optional(),
 });
 
-export type Config = z.infer<typeof configSchema>;
+/** Tests use an in-memory database, so they never need a database file. */
+const DEFAULT_DATABASE_PATH = {
+  development: "data/evenementenloket.sqlite",
+  production: "data/evenementenloket.sqlite",
+  test: ":memory:",
+} as const;
+
+export type Config = Omit<z.infer<typeof configSchema>, "DATABASE_PATH"> & {
+  DATABASE_PATH: string;
+};
 
 export class ConfigError extends Error {
   readonly settings: string[];
@@ -28,5 +38,8 @@ export function loadConfig(env: Record<string, string | undefined>): Config {
     const settings = [...new Set(result.error.issues.map((issue) => String(issue.path[0])))];
     throw new ConfigError(settings);
   }
-  return result.data;
+  return {
+    ...result.data,
+    DATABASE_PATH: result.data.DATABASE_PATH ?? DEFAULT_DATABASE_PATH[result.data.NODE_ENV],
+  };
 }

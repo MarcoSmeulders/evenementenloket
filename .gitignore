@@ -12,6 +12,9 @@ test-results/
 storybook-static/
 *.tsbuildinfo
 
+# Local SQLite database of the API
+apps/api/data/
+
 # Full UX reviews with the learning part (coaching for the developer, not for the portfolio)
 docs/ux-reviews/prive/
 

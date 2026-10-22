@@ -13,7 +13,12 @@ describe("api-operations: Configuration checked at startup", () => {
 
   test("valid configuration starts the API", async () => {
     const example = await readFile(new URL("../.env.example", import.meta.url), "utf8");
-    const { app } = createServer({ ...parseEnv(example), LOG_LEVEL: "silent" });
+    // In-memory database: unit tests never need a database file (quality-gates).
+    const { app } = createServer({
+      ...parseEnv(example),
+      LOG_LEVEL: "silent",
+      DATABASE_PATH: ":memory:",
+    });
 
     const response = await app.request("/api/health");
 

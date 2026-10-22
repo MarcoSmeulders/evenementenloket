@@ -7,9 +7,9 @@ import {
 } from "@evenementenloket/schema";
 import { buildApp } from "./app";
 import { loadConfig } from "./config";
-import { captureLogs } from "./test-support";
+import { captureLogs } from "./testUtils";
 
-const quietConfig = loadConfig({ LOG_LEVEL: "silent" });
+const quietConfig = loadConfig({ LOG_LEVEL: "silent", NODE_ENV: "test" });
 
 describe("api-operations: Health check", () => {
   test("health check responds", async () => {
@@ -25,7 +25,9 @@ describe("api-operations: Health check", () => {
 describe("api-operations: No credentials in logs", () => {
   test("authorization header is redacted", async () => {
     const logs = captureLogs();
-    const app = buildApp(loadConfig({ LOG_LEVEL: "info" }), { logStream: logs.stream });
+    const app = buildApp(loadConfig({ LOG_LEVEL: "info", NODE_ENV: "test" }), {
+      logStream: logs.stream,
+    });
 
     await app.request("/api/health", {
       headers: {

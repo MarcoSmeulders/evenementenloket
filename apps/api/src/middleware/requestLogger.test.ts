@@ -2,8 +2,8 @@ import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { pino } from "pino";
 import { describe, expect, test } from "vitest";
-import { captureLogs } from "../test-support";
-import { requestLogger } from "./request-logger";
+import { captureLogs } from "../testUtils";
+import { requestLogger } from "./requestLogger";
 
 function appWithLogger() {
   const logs = captureLogs();
