@@ -59,3 +59,73 @@ a {
   /* One line, so screen readers do not read squashed words without spaces. */
   white-space: nowrap;
 }
+
+h2 {
+  font-size: var(--font-size-large);
+  line-height: var(--line-height-heading);
+  margin: var(--space-5) 0 var(--space-3);
+}
+
+ul {
+  margin: 0 0 var(--space-3);
+  max-width: var(--content-max-width);
+}
+
+/*
+ * Buttons. Also used on links that only navigate, so they keep link semantics. Padding
+ * shrinks on narrow screens so buttons fit at 320px with large text.
+ */
+.button {
+  display: inline-block;
+  max-width: 100%;
+  min-height: var(--control-min-height);
+  padding: var(--space-2) clamp(var(--space-3), 4vw, var(--space-4));
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: var(--color-background);
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.button--secondary {
+  background: var(--color-background);
+  color: var(--color-primary);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+@media (max-width: 30em) {
+  .button-row .button {
+    width: 100%;
+  }
+}
+
+/* A heading that receives focus on a page change shows no ring: it is not interactive. */
+h1[tabindex="-1"]:focus {
+  outline: none;
+}
+
+.heading-caption {
+  display: block;
+  font-size: var(--font-size-body);
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+}
+
+/* Plain text confirmation directly after the heading, for example "Stap 1 is opgeslagen." */
+.confirmation {
+  border-left: var(--border-accent);
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+}

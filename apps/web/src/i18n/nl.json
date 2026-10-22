@@ -11,6 +11,150 @@
   },
   "start": {
     "title": "Een evenement melden",
-    "intro": "Organiseert u een klein evenement in Kranswijk? Bijvoorbeeld een buurtfeest, markt of sportdag. Dat meldt u hier bij de gemeente. Het formulier is nog niet klaar."
+    "intro": "Organiseert u een klein evenement in Kranswijk? Bijvoorbeeld een buurtfeest, markt of sportdag. Dat meldt u hier bij de gemeente. Het invullen duurt ongeveer 10 minuten.",
+    "needTitle": "Dit heeft u nodig",
+    "needOrganiser": "uw naam en e-mailadres, en eventueel de naam van uw organisatie;",
+    "needEvent": "de naam, plaats, datum en tijd van het evenement, en het verwachte aantal bezoekers.",
+    "noLogin": "U hoeft niet in te loggen. U krijgt een persoonlijke link waarmee u later verder kunt.",
+    "button": "Start melding",
+    "failed": "Het starten is niet gelukt. Probeer het opnieuw."
+  },
+  "link": {
+    "title": "Bewaar uw persoonlijke link",
+    "intro": "Met deze link opent u uw melding later weer. De link werkt als een sleutel: iedereen met de link kan uw melding bekijken en verder invullen.",
+    "saved": {
+      "organiser": "Stap 1 is opgeslagen",
+      "event": "Stap 2 is opgeslagen"
+    },
+    "savedIntro": "Bewaar uw persoonlijke link. Daarmee gaat u later verder waar u bent gebleven. U kunt dit venster daarna sluiten.",
+    "label": "Uw persoonlijke link",
+    "warning": "Let op: de gemeente kan een kwijtgeraakte link niet opnieuw sturen. Zonder link kunt u niet verder met uw melding.",
+    "copy": "Kopieer link",
+    "copied": "De link is gekopieerd.",
+    "copyFailed": "Kopiëren lukte niet. Selecteer de link en kopieer hem zelf.",
+    "mail": "Mail de link naar uzelf",
+    "mailSubject": "Mijn melding bij het Evenementenloket Kranswijk",
+    "mailBody": "Met deze link ga ik verder met mijn melding:\n\n{{link}}",
+    "bookmark": "U kunt ook een bladwijzer maken: het adres in de adresbalk is uw link.",
+    "retention": "Uw concept blijft {{days}} dagen bewaard na de laatste keer dat u het opslaat. Daarna wordt het verwijderd.",
+    "continueStart": "Verder naar stap 1",
+    "continue": "Verder met invullen"
+  },
+  "invalidLink": {
+    "title": "Deze link werkt niet",
+    "intro": "Met deze link kunnen we geen melding openen. Controleer of u de hele link heeft gebruikt.",
+    "retention": "Een concept dat {{days}} dagen niet is opgeslagen, wordt verwijderd. Werkt de link niet, dan kunt u een nieuwe melding starten.",
+    "startLink": "Een nieuwe melding starten"
+  },
+  "loadError": {
+    "title": "Er ging iets mis",
+    "intro": "De pagina kon niet worden geladen. Probeer het later opnieuw.",
+    "startLink": "Naar de startpagina"
+  },
+  "steps": {
+    "label": "Stappen",
+    "organiser": "Organisator",
+    "event": "Evenement",
+    "review": "Controleren",
+    "caption": "Stap {{number}} van 3",
+    "back": "Vorige stap",
+    "saveContinue": "Opslaan en verder",
+    "saveLater": "Opslaan en later verdergaan",
+    "saved": {
+      "organiser": "Stap 1 is opgeslagen.",
+      "event": "Stap 2 is opgeslagen."
+    },
+    "errorPrefix": "Fout: ",
+    "errorSummary": "Er is een probleem",
+    "saveFailedTitle": "Opslaan is niet gelukt",
+    "saveFailed": "Uw antwoorden zijn niet opgeslagen. Ze staan nog in het formulier. Probeer het opnieuw."
+  },
+  "organiser": {
+    "type": {
+      "legend": "Meldt u als particulier of namens een organisatie?",
+      "private": "Particulier",
+      "organisation": "Namens een organisatie"
+    },
+    "organisationName": "Naam van de organisatie",
+    "contactName": "Naam contactpersoon",
+    "contactNameHint": "De persoon die de gemeente kan benaderen over het evenement.",
+    "email": "E-mailadres",
+    "phone": "Telefoonnummer (niet verplicht)"
+  },
+  "event": {
+    "eventName": "Naam van het evenement",
+    "eventNameHint": "Bijvoorbeeld \"Zomerfeest Kastanjelaan\".",
+    "eventType": {
+      "legend": "Soort evenement",
+      "market": "Markt",
+      "sports": "Sport",
+      "music": "Muziek",
+      "neighbourhood": "Buurtfeest",
+      "other": "Anders"
+    },
+    "eventTypeOther": "Welk soort evenement is het?",
+    "location": "Locatie",
+    "locationHint": "Een adres of omschrijving, zoals \"grasveld achter Kastanjelaan 1-20\".",
+    "start": "Begin",
+    "end": "Einde",
+    "date": "Datum",
+    "time": "Tijd",
+    "visitors": {
+      "legend": "Verwacht aantal bezoekers",
+      "under-100": "Minder dan 100",
+      "100-499": "100 tot 500",
+      "500-1999": "500 tot 2.000",
+      "2000-plus": "2.000 of meer"
+    },
+    "description": "Beschrijving",
+    "descriptionHint": "Wat gaat er gebeuren? Gebruik maximaal 1.000 tekens.",
+    "charactersLeft_one": "U heeft nog {{count}} teken",
+    "charactersLeft_other": "U heeft nog {{count}} tekens",
+    "charactersOver_one": "U heeft {{count}} teken te veel",
+    "charactersOver_other": "U heeft {{count}} tekens te veel"
+  },
+  "review": {
+    "title": "Controleer uw antwoorden",
+    "notYet": "Indienen kan in deze versie nog niet. Uw concept is bewaard.",
+    "notFilledIn": "Niet ingevuld"
+  },
+  "errors": {
+    "generic": {
+      "required": "Vul dit veld in",
+      "too_long": "Deze tekst is te lang",
+      "invalid_email": "Vul een geldig e-mailadres in, zoals naam@example.org",
+      "invalid_phone": "Vul een geldig telefoonnummer in, zoals 06 12345678",
+      "invalid_date": "Vul een geldige datum in",
+      "invalid_time": "Vul een geldige tijd in, zoals 14:00",
+      "invalid_option": "Kies een van de mogelijkheden",
+      "start_in_past": "Het begin moet in de toekomst liggen",
+      "end_before_start": "Het einde moet na het begin liggen",
+      "invalid": "Controleer dit veld"
+    },
+    "fields": {
+      "organiserType": { "required": "Kies of u meldt als particulier of namens een organisatie" },
+      "organisationName": { "required": "Vul de naam van de organisatie in" },
+      "contactName": { "required": "Vul de naam van de contactpersoon in" },
+      "email": { "required": "Vul een e-mailadres in" },
+      "eventName": { "required": "Vul de naam van het evenement in" },
+      "eventType": { "required": "Kies het soort evenement" },
+      "eventTypeOther": { "required": "Beschrijf welk soort evenement het is" },
+      "location": { "required": "Vul de locatie in" },
+      "startDate": {
+        "required": "Vul de begindatum in",
+        "invalid_date": "Vul een geldige begindatum in"
+      },
+      "startTime": { "required": "Vul de begintijd in" },
+      "endDate": {
+        "required": "Vul de einddatum in",
+        "invalid_date": "Vul een geldige einddatum in"
+      },
+      "endTime": { "required": "Vul de eindtijd in" },
+      "visitors": { "required": "Kies het verwachte aantal bezoekers" },
+      "description": {
+        "required": "Vul een beschrijving in",
+        "too_long": "De beschrijving mag maximaal 1.000 tekens lang zijn"
+      }
+    }
   }
 }

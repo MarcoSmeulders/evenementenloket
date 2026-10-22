@@ -1,0 +1,46 @@
+.link-box {
+  border-left: var(--border-accent);
+  background: var(--color-surface);
+  padding: var(--space-3) clamp(var(--space-2), 3vw, var(--space-4));
+  margin: 0 0 var(--space-4);
+  max-width: var(--content-max-width);
+}
+
+.link-box__label {
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+/* A link has no spaces, so it must be allowed to break anywhere at narrow widths. */
+.link-box__url {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--font-size-small);
+  background: var(--color-background);
+  border: 1px solid var(--color-text-muted);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.link-box__warning {
+  font-weight: 700;
+}
+
+.link-box__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 30em) {
+  .link-box__actions .button {
+    width: 100%;
+  }
+}
+
+.link-box__status {
+  min-height: 1.5em;
+  margin: var(--space-2) 0 0;
+  font-weight: 600;
+}

@@ -1,0 +1,22 @@
+.step-indicator {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-3);
+  padding-left: 1.25em;
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+.step-indicator li {
+  padding-right: var(--space-2);
+}
+
+.step-indicator [aria-current="step"] {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.4em;
+}

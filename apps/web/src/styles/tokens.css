@@ -10,6 +10,9 @@
   --color-surface: #eef4f3;
   --color-primary: #0b5d5b; /* 7.7:1 on background, 6.9:1 on surface */
   --color-link: var(--color-primary);
+  --color-error: #b3261e; /* 6.5:1 on background, 5.9:1 on surface */
+  --border-input: 2px solid var(--color-text);
+  --control-min-height: 2.75rem; /* 44px: comfortable target size */
 
   /* Focus ring: 9.1:1 on background, 8.2:1 on surface (minimum required: 3:1) */
   --focus-color: #5a2ca0;

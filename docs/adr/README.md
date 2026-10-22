@@ -16,6 +16,7 @@ wat het kost. Zo kun je later zien waarom iets zo is, ook als niemand het meer w
 | [0009](0009-geheime-link-in-plaats-van-inloggen.md) | Een geheime link in plaats van inloggen voor aanvragers |
 | [0010](0010-opslag-node-sqlite-json-per-stap.md) | Opslag met node:sqlite, JSON per stap en een bewaartermijn van 30 dagen |
 | [0011](0011-tanstack-query-react-hook-form-date-fns.md) | TanStack Query, React Hook Form en date-fns |
+| [0012](0012-geen-versie-zonder-javascript.md) | Geen versie zonder JavaScript |
 | [0013](0013-functionele-stijl-leesbaar-zonder-point-free.md) | Functionele stijl, leesbaar voor iedereen |
 | [0014](0014-dependency-alleen-met-meerwaarde.md) | Een dependency alleen als hij meerwaarde heeft |
 
