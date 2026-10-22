@@ -15,7 +15,7 @@ context: |
   - Functional style, no point-free code (docs/adr/0013).
   - A runtime dependency only when it adds value; the design gives the reason and an
     alternative (docs/adr/0014). Redux and FP libraries are not needed now.
-  - Size budget: about 3,000 lines of non-test TypeScript.
+  - Size budget: about 4,000 lines of non-test TypeScript.
   - Public repository: no secrets, real personal data or infrastructure details.
   - OpenSpec artifacts in English; ADRs and other docs in Dutch. Write simply.
 
